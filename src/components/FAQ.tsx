@@ -33,6 +33,16 @@ const faqCategories: FAQCategory[] = [
         question: 'Do you work with international clients?',
         answer: 'Yes, absolutely! I work with clients globally. We coordinate through Zoom/Google Meet, utilize Slack/Discord for messaging, and use Figma and GitHub to collaborate in real-time, ensuring a smooth process regardless of time zones.',
       },
+      {
+        id: 3,
+        question: 'What software and technologies do you use?',
+        answer: 'For design, I use Figma, Adobe Illustrator, and Photoshop. For coding, I primarily use React, TypeScript, Next.js, and TailwindCSS to build fast, responsive, and SEO-friendly web applications, styled with clean vanilla CSS or custom UI modules.',
+      },
+      {
+        id: 4,
+        question: 'Can you work with my existing branding?',
+        answer: 'Yes, absolutely. If you already have brand guidelines, a logo, or established colors, I can adapt to your design system and build new assets or web pages that perfectly align with your current brand identity.',
+      },
     ],
   },
   {
@@ -41,14 +51,24 @@ const faqCategories: FAQCategory[] = [
     icon: <MessageSquare size={16} />,
     items: [
       {
-        id: 3,
+        id: 5,
         question: 'How long does a typical project take?',
         answer: 'Timelines vary by complexity: Brand identity packages take 2-3 weeks. A standard landing page takes 1-2 weeks. Full custom interactive websites take 3-5 weeks. Smaller items like social media posts can be completed in 3-5 days.',
       },
       {
-        id: 4,
+        id: 6,
         question: 'What is your revision policy?',
         answer: 'Every project includes 3 rounds of comprehensive revisions during the design phase. I make sure we align on wireframes and mood boards early on so that the final designs are exactly what you expect.',
+      },
+      {
+        id: 7,
+        question: 'Do I own the source files and assets?',
+        answer: 'Yes, absolutely. Once final payment is made, all visual assets, design source files (Figma), and codebase files (GitHub repository) are fully transferred to you with complete ownership rights.',
+      },
+      {
+        id: 8,
+        question: 'How do we keep track of project progress?',
+        answer: 'We utilize collaborative tools like Notion or Trello to track milestones, share updates, and manage project files. I also provide weekly status check-ins so you are always updated on the progress.',
       },
     ],
   },
@@ -58,14 +78,24 @@ const faqCategories: FAQCategory[] = [
     icon: <ShieldCheck size={16} />,
     items: [
       {
-        id: 5,
+        id: 9,
         question: 'Do you offer flexible payment plans?',
         answer: 'Yes! Typically, projects are divided into a 50% upfront deposit to secure the slot, and 50% upon final sign-off and assets delivery. For larger projects, we can split it into 3-4 milestone-based payments.',
       },
       {
-        id: 6,
+        id: 10,
         question: 'What post-launch support do you provide?',
         answer: 'I offer 30 days of free post-launch support to resolve any bugs, explain cms/code management, and ensure a seamless handover. Long-term updates or monthly maintenance retainers are also available if you need ongoing help.',
+      },
+      {
+        id: 11,
+        question: 'What happens if I need changes months after delivery?',
+        answer: 'For updates after the 30-day support window, you can hire me on an hourly basis, or we can set up a monthly maintenance retainer for ongoing support and enhancements.',
+      },
+      {
+        id: 12,
+        question: 'Do you provide domain and hosting setup?',
+        answer: 'Yes, I can guide you through purchasing a domain name and setting up hosting (on platforms like Vercel, Netlify, or Hostinger). I make sure the site is live, secure with SSL, and ready to go.',
       },
     ],
   },

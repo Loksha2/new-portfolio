@@ -215,8 +215,9 @@ const DetailModal = ({ project, onClose }: DetailModalProps) => {
         <motion.div
           className="relative z-10 w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl"
           style={{
-            background: 'linear-gradient(145deg, #ffffff 0%, #faf6f1 100%)',
-            boxShadow: '0 40px 120px rgba(0,0,0,0.35)',
+            background: 'linear-gradient(145deg, var(--bg-card) 0%, var(--bg-card-end) 100%)',
+            boxShadow: 'var(--shadow-lg)',
+            border: '1px solid var(--border-subtle)',
           }}
           initial={{ y: 40, opacity: 0, scale: 0.96 }}
           animate={{ y: 0, opacity: 1, scale: 1 }}
@@ -346,17 +347,17 @@ const DetailModal = ({ project, onClose }: DetailModalProps) => {
               )}
             </div>
 
-            <h2 className="text-[26px] sm:text-[32px] font-black text-[#1a1a1a] leading-tight mb-3">
+            <h2 className="text-[26px] sm:text-[32px] font-black leading-tight mb-3" style={{ color: 'var(--text-primary)' }}>
               {project.title}
             </h2>
-            <p className="text-[15px] text-[#5a5a5a] leading-[1.75] mb-6">
+            <p className="text-[15px] leading-[1.75] mb-6" style={{ color: 'var(--text-secondary)' }}>
               {project.description}
             </p>
 
             {project.brief && !project.isUserProject && (
-              <div className="p-5 rounded-2xl mb-6" style={{ background: '#f5f0e8', border: '1px solid rgba(237,232,223,0.9)' }}>
-                <div className="text-[10px] font-bold text-[#8a8a8a] tracking-[0.2em] uppercase mb-2">Client Brief</div>
-                <p className="text-[13px] text-[#5a5a5a] leading-[1.7]">{project.brief}</p>
+              <div className="p-5 rounded-2xl mb-6" style={{ background: 'var(--bg-section-alt2)', border: '1px solid var(--border-subtle)' }}>
+                <div className="text-[10px] font-bold text-[var(--text-faint)] tracking-[0.2em] uppercase mb-2">Client Brief</div>
+                <p className="text-[13px] leading-[1.7]" style={{ color: 'var(--text-secondary)' }}>{project.brief}</p>
               </div>
             )}
 
@@ -474,8 +475,9 @@ const AddEditModal = ({ initial, onSave, onClose }: AddEditModalProps) => {
         <motion.div
           className="relative z-10 w-full max-w-2xl max-h-[92vh] overflow-y-auto rounded-3xl"
           style={{
-            background: 'linear-gradient(145deg, #ffffff 0%, #faf6f1 100%)',
-            boxShadow: '0 40px 120px rgba(0,0,0,0.3)',
+            background: 'linear-gradient(145deg, var(--bg-card) 0%, var(--bg-card-end) 100%)',
+            boxShadow: 'var(--shadow-lg)',
+            border: '1px solid var(--border-subtle)',
           }}
           initial={{ y: 40, opacity: 0, scale: 0.96 }}
           animate={{ y: 0, opacity: 1, scale: 1 }}
@@ -483,10 +485,10 @@ const AddEditModal = ({ initial, onSave, onClose }: AddEditModalProps) => {
           transition={{ duration: 0.35, ease: easeOut }}
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-7 pt-7 pb-5 border-b" style={{ borderColor: 'rgba(237,232,223,0.8)' }}>
+          <div className="flex items-center justify-between px-7 pt-7 pb-5 border-b" style={{ borderColor: 'var(--border-subtle)' }}>
             <div>
-              <h3 className="text-[20px] font-black text-[#1a1a1a]">{initial ? 'Edit Project' : 'Add New Project'}</h3>
-              <p className="text-[13px] text-[#8a8a8a] mt-0.5">Fill in the details below</p>
+              <h3 className="text-[20px] font-black" style={{ color: 'var(--text-primary)' }}>{initial ? 'Edit Project' : 'Add New Project'}</h3>
+              <p className="text-[13px] mt-0.5" style={{ color: 'var(--text-muted)' }}>Fill in the details below</p>
             </div>
             <button
               onClick={onClose}
@@ -501,7 +503,7 @@ const AddEditModal = ({ initial, onSave, onClose }: AddEditModalProps) => {
           <div className="px-7 py-6 space-y-5">
             {/* Category */}
             <div>
-              <label className="block text-[12px] font-semibold text-[#4a4a4a] tracking-wide uppercase mb-2">Category</label>
+              <label className="block text-[12px] font-semibold tracking-wide uppercase mb-2" style={{ color: 'var(--text-secondary)' }}>Category</label>
               <div className="flex gap-3">
                 {(['brand', 'social'] as Category[]).map(cat => (
                   <button
@@ -509,9 +511,9 @@ const AddEditModal = ({ initial, onSave, onClose }: AddEditModalProps) => {
                     onClick={() => setForm(f => ({ ...f, category: cat }))}
                     className="flex-1 py-2.5 rounded-xl text-[13px] font-semibold transition-all"
                     style={{
-                      background: form.category === cat ? '#1a1a1a' : 'transparent',
-                      color: form.category === cat ? 'white' : '#6b6b6b',
-                      border: form.category === cat ? '1.5px solid transparent' : '1.5px solid rgba(26,26,26,0.15)',
+                      background: form.category === cat ? 'var(--text-primary)' : 'transparent',
+                      color: form.category === cat ? 'var(--bg-page)' : 'var(--text-secondary)',
+                      border: form.category === cat ? '1.5px solid transparent' : '1.5px solid var(--border-subtle)',
                     }}
                     data-cursor-hover
                   >
@@ -523,16 +525,17 @@ const AddEditModal = ({ initial, onSave, onClose }: AddEditModalProps) => {
 
             {/* Title */}
             <div>
-              <label className="block text-[12px] font-semibold text-[#4a4a4a] tracking-wide uppercase mb-2">Project Title *</label>
+              <label className="block text-[12px] font-semibold tracking-wide uppercase mb-2" style={{ color: 'var(--text-secondary)' }}>Project Title *</label>
               <input
                 type="text"
                 placeholder="e.g. Minimal Coffee Brand Identity"
                 value={form.title}
                 onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
-                className="w-full px-4 py-3 rounded-xl text-[14px] text-[#1a1a1a] outline-none transition-all"
+                className="w-full px-4 py-3 rounded-xl text-[14px] outline-none transition-all"
                 style={{
-                  background: '#f9f6f1',
-                  border: `1.5px solid ${form.title ? accent + '50' : 'rgba(237,232,223,0.9)'}`,
+                  background: 'var(--bg-section-alt2)',
+                  border: `1.5px solid ${form.title ? accent + '50' : 'var(--border-subtle)'}`,
+                  color: 'var(--text-primary)',
                   fontFamily: 'Inter, sans-serif',
                 }}
               />
@@ -540,16 +543,17 @@ const AddEditModal = ({ initial, onSave, onClose }: AddEditModalProps) => {
 
             {/* Description */}
             <div>
-              <label className="block text-[12px] font-semibold text-[#4a4a4a] tracking-wide uppercase mb-2">Short Description</label>
+              <label className="block text-[12px] font-semibold tracking-wide uppercase mb-2" style={{ color: 'var(--text-secondary)' }}>Short Description</label>
               <textarea
                 rows={3}
                 placeholder="What makes this project special?"
                 value={form.description}
                 onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-                className="w-full px-4 py-3 rounded-xl text-[14px] text-[#1a1a1a] outline-none resize-none transition-all"
+                className="w-full px-4 py-3 rounded-xl text-[14px] outline-none resize-none transition-all"
                 style={{
-                  background: '#f9f6f1',
-                  border: '1.5px solid rgba(237,232,223,0.9)',
+                  background: 'var(--bg-section-alt2)',
+                  border: '1.5px solid var(--border-subtle)',
+                  color: 'var(--text-primary)',
                   fontFamily: 'Inter, sans-serif',
                 }}
               />
@@ -557,16 +561,17 @@ const AddEditModal = ({ initial, onSave, onClose }: AddEditModalProps) => {
 
             {/* Tags */}
             <div>
-              <label className="block text-[12px] font-semibold text-[#4a4a4a] tracking-wide uppercase mb-2">Tags <span className="normal-case font-normal text-[#8a8a8a]">(comma-separated, optional)</span></label>
+              <label className="block text-[12px] font-semibold tracking-wide uppercase mb-2" style={{ color: 'var(--text-secondary)' }}>Tags <span className="normal-case font-normal text-[var(--text-faint)]">(comma-separated, optional)</span></label>
               <input
                 type="text"
                 placeholder="Logo, Brand Kit, Typography"
                 value={form.tags}
                 onChange={e => setForm(f => ({ ...f, tags: e.target.value }))}
-                className="w-full px-4 py-3 rounded-xl text-[14px] text-[#1a1a1a] outline-none transition-all"
+                className="w-full px-4 py-3 rounded-xl text-[14px] outline-none transition-all"
                 style={{
-                  background: '#f9f6f1',
-                  border: '1.5px solid rgba(237,232,223,0.9)',
+                  background: 'var(--bg-section-alt2)',
+                  border: '1.5px solid var(--border-subtle)',
+                  color: 'var(--text-primary)',
                   fontFamily: 'Inter, sans-serif',
                 }}
               />
@@ -603,22 +608,22 @@ const AddEditModal = ({ initial, onSave, onClose }: AddEditModalProps) => {
                   onClick={() => previewInputRef.current?.click()}
                   className="w-full rounded-2xl flex flex-col items-center justify-center gap-3 py-10 transition-all"
                   style={{
-                    background: '#f9f6f1',
-                    border: `2px dashed rgba(237,232,223,0.9)`,
-                    color: '#8a8a8a',
+                    background: 'var(--bg-section-alt2)',
+                    border: `2px dashed var(--border-subtle)`,
+                    color: 'var(--text-muted)',
                   }}
                   data-cursor-hover
                 >
                   <ImageIcon size={28} style={{ color: accent }} />
                   <span className="text-[13px] font-medium">Click to upload preview image</span>
-                  <span className="text-[11px] text-[#b0b0b0]">PNG, JPG, WEBP</span>
+                  <span className="text-[11px] text-[var(--text-ghost)]">PNG, JPG, WEBP</span>
                 </button>
               )}
             </div>
 
             {/* Additional images */}
             <div>
-              <label className="block text-[12px] font-semibold text-[#4a4a4a] tracking-wide uppercase mb-2">Additional Images <span className="normal-case font-normal text-[#8a8a8a]">(optional — shown in detail view)</span></label>
+              <label className="block text-[12px] font-semibold tracking-wide uppercase mb-2" style={{ color: 'var(--text-secondary)' }}>Additional Images <span className="normal-case font-normal text-[var(--text-faint)]">(optional — shown in detail view)</span></label>
               <input ref={additionalInputRef} type="file" accept="image/*" multiple className="hidden" onChange={handleAdditionalUpload} />
 
               {form.additionalImages.length > 0 && (
@@ -643,9 +648,9 @@ const AddEditModal = ({ initial, onSave, onClose }: AddEditModalProps) => {
                 onClick={() => additionalInputRef.current?.click()}
                 className="w-full rounded-xl flex items-center justify-center gap-2 py-3 text-[13px] font-medium transition-all"
                 style={{
-                  background: '#f9f6f1',
-                  border: '1.5px dashed rgba(237,232,223,0.9)',
-                  color: '#8a8a8a',
+                  background: 'var(--bg-section-alt2)',
+                  border: '1.5px dashed var(--border-subtle)',
+                  color: 'var(--text-muted)',
                 }}
                 data-cursor-hover
               >
@@ -656,7 +661,7 @@ const AddEditModal = ({ initial, onSave, onClose }: AddEditModalProps) => {
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-end gap-3 px-7 pb-7 pt-4 border-t" style={{ borderColor: 'rgba(237,232,223,0.8)' }}>
+          <div className="flex items-center justify-end gap-3 px-7 pb-7 pt-4 border-t" style={{ borderColor: 'var(--border-subtle)' }}>
             <button
               onClick={onClose}
               className="btn-secondary text-[14px]"
@@ -705,9 +710,9 @@ const ProjectCard = ({ project, index, onOpenDetail, onEdit, onDelete }: Project
       transition={{ duration: 0.6, delay: index * 0.08, ease: easeOut }}
       className="group relative rounded-2xl overflow-hidden"
       style={{
-        background: 'linear-gradient(145deg, #ffffff 0%, #f9f6f1 100%)',
-        border: '1px solid rgba(237, 232, 223, 0.9)',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
+        background: 'linear-gradient(145deg, var(--bg-card) 0%, var(--bg-card-end) 100%)',
+        border: '1px solid var(--border-subtle)',
+        boxShadow: 'var(--shadow-sm)',
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -838,13 +843,13 @@ const ProjectCard = ({ project, index, onOpenDetail, onEdit, onDelete }: Project
       {/* Card body */}
       <div className="p-5">
         <h3
-          className="text-[15px] font-bold text-[#1a1a1a] mb-1.5 leading-snug"
+          className="text-[15px] font-bold mb-1.5 leading-snug"
           onClick={() => onOpenDetail(project)}
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: 'pointer', color: 'var(--text-primary)' }}
         >
           {project.title}
         </h3>
-        <p className="text-[13px] text-[#6b6b6b] leading-[1.65] mb-4 line-clamp-2">
+        <p className="text-[13px] leading-[1.65] mb-4 line-clamp-2" style={{ color: 'var(--text-secondary)' }}>
           {project.description}
         </p>
         <div className="flex items-center justify-between">
@@ -930,9 +935,9 @@ const FilterBtn = ({
     onClick={onClick}
     className="relative px-6 py-2.5 rounded-full text-[13px] font-semibold transition-all"
     style={{
-      background: active ? '#1a1a1a' : 'transparent',
-      color: active ? 'white' : '#6b6b6b',
-      border: active ? '1.5px solid transparent' : '1.5px solid rgba(26,26,26,0.15)',
+      background: active ? 'var(--text-primary)' : 'transparent',
+      color: active ? 'var(--bg-page)' : 'var(--text-muted)',
+      border: active ? '1.5px solid transparent' : '1.5px solid var(--border-subtle)',
     }}
     whileHover={{ scale: 1.03 }}
     whileTap={{ scale: 0.97 }}
