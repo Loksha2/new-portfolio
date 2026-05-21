@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useMemo } from 'react';
 import { motion, useInView, Variants } from 'framer-motion';
 
 interface BlurTextProps {
@@ -10,6 +10,7 @@ interface BlurTextProps {
   className?: string;
   style?: React.CSSProperties;
   as?: 'h1' | 'h2' | 'h3' | 'p' | 'span' | 'div';
+  trigger?: boolean;
 }
 
 const BlurText: React.FC<BlurTextProps> = ({
@@ -21,12 +22,13 @@ const BlurText: React.FC<BlurTextProps> = ({
   className = '',
   style,
   as = 'p',
+  trigger = true,
 }) => {
   const containerRef = useRef<HTMLElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: '-50px' });
   const [animated, setAnimated] = useState(false);
 
-  const words = text ? text.split(' ') : [];
+  const words = useMemo(() => (text ? text.split(' ') : []), [text]);
   const staggerDelaySec = delay / 1000;
 
   const childVariants: Variants = {
@@ -49,10 +51,10 @@ const BlurText: React.FC<BlurTextProps> = ({
   };
 
   useEffect(() => {
-    if (isInView && !animated) {
+    if (isInView && trigger && !animated) {
       setAnimated(true);
     }
-  }, [isInView, animated]);
+  }, [isInView, trigger, animated]);
 
   useEffect(() => {
     if (animated && onAnimationComplete) {
@@ -73,12 +75,19 @@ const BlurText: React.FC<BlurTextProps> = ({
   // Create the dynamic motion component
   const MotionComponent = motion[as] as any;
 
+  // Determine flex alignment based on text alignment classes in className
+  const alignmentClass = className.includes('text-center')
+    ? 'justify-center'
+    : className.includes('text-right')
+    ? 'justify-end'
+    : 'justify-start';
+
   return (
     <MotionComponent
       ref={containerRef}
       initial="hidden"
       animate={animated ? 'visible' : 'hidden'}
-      className={`flex flex-wrap ${className}`}
+      className={`flex flex-wrap ${alignmentClass} ${className}`}
       style={style}
     >
       {words.map((word, wordIdx) => {
@@ -88,7 +97,7 @@ const BlurText: React.FC<BlurTextProps> = ({
               key={wordIdx}
               variants={childVariants}
               custom={wordIdx}
-              className="inline-block mr-[0.25em]"
+              className="inline-block me-[0.25em]"
             >
               {word}
             </motion.span>
@@ -96,7 +105,7 @@ const BlurText: React.FC<BlurTextProps> = ({
         } else {
           const chars = Array.from(word);
           return (
-            <span key={wordIdx} className="inline-block mr-[0.25em] whitespace-nowrap">
+            <span key={wordIdx} className="inline-block me-[0.25em] whitespace-nowrap">
               {chars.map((char, charIdx) => {
                 let globalCharIndex = 0;
                 for (let i = 0; i < wordIdx; i++) {

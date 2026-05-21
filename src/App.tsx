@@ -51,7 +51,7 @@ function App() {
           <CustomCursor />
           <Navbar />
           <main>
-            <Hero />
+            <Hero isVisible={splashDone} />
             <Marquee />
             <About />
             <Services />

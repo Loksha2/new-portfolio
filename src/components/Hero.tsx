@@ -84,7 +84,7 @@ const FloatingElements = () => (
 );
 
 // ─── HERO ────────────────────────────────────────────────────────────────────
-const Hero = () => {
+const Hero = ({ isVisible = true }: { isVisible?: boolean }) => {
   const { settings } = useSiteSettings();
   const hero = settings.hero;
   const handleScroll = (href: string) => {
@@ -108,7 +108,8 @@ const Hero = () => {
 
             {/* Available badge */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.6, ease: easeOut }}
               className="inline-flex items-center gap-2 rounded-full px-4 py-2 mb-8 w-fit"
               style={{
@@ -129,6 +130,7 @@ const Hero = () => {
               delay={50}
               animateBy="words"
               direction="top"
+              trigger={isVisible}
               className="font-black leading-[1.05] tracking-tight mb-6"
               style={{
                 fontSize: 'clamp(38px, 5.5vw, 68px)',
@@ -139,7 +141,8 @@ const Hero = () => {
 
             {/* Sub */}
             <motion.p
-              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.7, delay: 0.22, ease: easeOut }}
               className="text-[16px] lg:text-[17px] leading-relaxed max-w-[500px] mb-10"
               style={{ color: 'var(--text-secondary)' }}
@@ -153,7 +156,8 @@ const Hero = () => {
 
             {/* CTAs */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.7, delay: 0.34, ease: easeOut }}
               className="flex flex-wrap gap-3 mb-12"
             >
@@ -177,7 +181,8 @@ const Hero = () => {
 
             {/* Stats row with animated counters */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.7, delay: 0.46, ease: easeOut }}
               className="flex flex-wrap gap-8"
             >
@@ -211,7 +216,8 @@ const Hero = () => {
 
           {/* ── RIGHT COLUMN — Mascot + floating cards ── */}
           <motion.div
-            initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, x: 40 }}
+            animate={isVisible ? { opacity: 1, x: 0 } : { opacity: 0, x: 40 }}
             transition={{ duration: 0.9, delay: 0.25, ease: easeOut }}
             className="hidden lg:flex flex-col items-center justify-center gap-6 relative"
           >
