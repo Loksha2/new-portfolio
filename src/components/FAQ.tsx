@@ -179,7 +179,7 @@ const FAQ = () => {
   return (
     <section
       id="faq"
-      className="section-padding relative overflow-hidden"
+      className="section-padding pb-32 relative overflow-hidden"
       style={{ background: 'transparent' }}
     >
       {/* Dynamic Background Glow */}

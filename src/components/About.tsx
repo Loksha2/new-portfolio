@@ -17,7 +17,7 @@ const About = () => {
   return (
     <section
       id="about"
-      className="section-padding relative overflow-hidden"
+      className="section-padding pb-32 relative overflow-visible"
       style={{ background: 'transparent' }}
     >
       {/* Decorative bg */}
