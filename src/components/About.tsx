@@ -40,9 +40,11 @@ const About = () => {
           </span>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-stretch">
-          {/* Left — text + skills */}
-          <div>
+        {/* Single grid: portrait spans full right side */}
+        <div className="grid lg:grid-cols-2 gap-x-16 lg:gap-x-20 gap-y-8" style={{ gridTemplateRows: 'auto auto auto' }}>
+          
+          {/* Left Row 1 — text + skills */}
+          <div style={{ gridColumn: '1', gridRow: '1' }}>
             <motion.h2
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -104,8 +106,8 @@ const About = () => {
             </motion.div>
           </div>
 
-          {/* Right — portrait image (tall, fills full height) */}
-          <div className="h-full">
+          {/* Right — portrait image spanning all rows */}
+          <div className="hidden lg:block" style={{ gridColumn: '2', gridRow: '1 / 4' }}>
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -133,12 +135,39 @@ const About = () => {
               </div>
             </motion.div>
           </div>
-        </div>
 
-        {/* ── Row 2: Stats (left) + Quote (right) ── */}
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 mt-8">
-          {/* Left — stat cards */}
-          <div className="flex flex-col gap-4">
+          {/* Mobile-only portrait (shows above stats on mobile) */}
+          <div className="lg:hidden" style={{ gridColumn: '1' }}>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.1, ease: easeOut }}
+              className="rounded-2xl overflow-hidden relative"
+              style={{
+                height: '400px',
+                background: 'linear-gradient(145deg, var(--bg-card) 0%, var(--bg-card-end) 100%)',
+                border: '1px solid var(--border-subtle)',
+                boxShadow: '0 8px 30px rgba(0,0,0,0.12)',
+              }}
+            >
+              <img
+                src={about.portraitImage}
+                alt={`${about.nameOverlay} — Graphic Designer`}
+                className="w-full h-full object-cover object-top"
+                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+              />
+              <div
+                className="absolute bottom-0 left-0 right-0 p-5"
+                style={{ background: 'linear-gradient(0deg, rgba(26,26,26,0.85) 0%, transparent 100%)' }}
+              >
+                <div className="text-white font-bold text-[16px]">{about.nameOverlay}</div>
+                <div className="text-white/60 text-[12px] mt-0.5">{about.locationOverlay}</div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Left Row 2 — stat cards */}
+          <div className="flex flex-col gap-4" style={{ gridColumn: '1' }}>
             {about.stats.map((stat, i) => (
               <motion.div
                 key={stat.label}
@@ -181,8 +210,8 @@ const About = () => {
             ))}
           </div>
 
-          {/* Right — quote card */}
-          <div className="flex flex-col justify-end">
+          {/* Left Row 3 — quote card */}
+          <div style={{ gridColumn: '1' }}>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
