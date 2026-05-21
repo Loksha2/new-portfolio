@@ -3,6 +3,7 @@ import { ArrowRight, Sparkles, ArrowDown } from 'lucide-react';
 import { useRef, useEffect, useState } from 'react';
 import { useSiteSettings } from './SiteSettingsContext';
 import DesignMascot from './DesignMascot';
+import BlurText from './BlurText';
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
@@ -123,17 +124,18 @@ const Hero = () => {
             </motion.div>
 
             {/* Headline */}
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.75, delay: 0.1, ease: easeOut }}
+            <BlurText
+              text={hero.headline}
+              delay={50}
+              animateBy="words"
+              direction="top"
               className="font-black leading-[1.05] tracking-tight mb-6"
               style={{
                 fontSize: 'clamp(38px, 5.5vw, 68px)',
                 color: 'var(--text-primary)',
               }}
-            >
-              {hero.headline}
-            </motion.h1>
+              as="h1"
+            />
 
             {/* Sub */}
             <motion.p
