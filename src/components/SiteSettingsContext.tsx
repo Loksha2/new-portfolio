@@ -108,6 +108,7 @@ export interface InstagramHighlight {
 }
 
 export interface InstagramSettings {
+  profileImage?: string;
   bioTitle: string;
   bioDescription: string;
   followersCount: string;
@@ -326,8 +327,9 @@ const defaultContact: ContactSettings = {
 };
 
 const defaultInstagram: InstagramSettings = {
-  bioTitle: "مصمم جرافيك | هويات بصرية وسوشيال ميديا 🎨",
-  bioDescription: "تصاميم تجذب الانتباه وتترك بصمة فريدة. تواصل معي لتنفيذ مشروعك القادم! 🔥",
+  profileImage: "",
+  bioTitle: "Graphic Designer | Brand Identity & Social Media 🎨",
+  bioDescription: "Designs that capture attention and leave a unique footprint. Let's work together! 🔥",
   followersCount: "12.5K",
   followingCount: "480",
   highlights: [

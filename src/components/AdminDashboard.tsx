@@ -1225,6 +1225,7 @@ function InstagramEditor() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
+  const [profileImage, setProfileImage] = useState('');
   const [bioTitle, setBioTitle] = useState('');
   const [bioDescription, setBioDescription] = useState('');
   const [followersCount, setFollowersCount] = useState('');
@@ -1234,6 +1235,7 @@ function InstagramEditor() {
   useEffect(() => {
     const inst = settings.instagram;
     if (inst) {
+      setProfileImage(inst.profileImage || '');
       setBioTitle(inst.bioTitle || '');
       setBioDescription(inst.bioDescription || '');
       setFollowersCount(inst.followersCount || '');
@@ -1246,7 +1248,7 @@ function InstagramEditor() {
     setSaving(true);
     setSaved(false);
     try {
-      await updateSection('instagram', { bioTitle, bioDescription, followersCount, followingCount, highlights });
+      await updateSection('instagram', { profileImage, bioTitle, bioDescription, followersCount, followingCount, highlights });
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
     } catch {
@@ -1268,6 +1270,9 @@ function InstagramEditor() {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         <div style={cardStyle}>
+          <div style={{ marginBottom: '16px' }}>
+            <ImageUploadButton label="صورة البروفايل (Profile Picture)" value={profileImage} onChange={setProfileImage} />
+          </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
             <div>
               <label style={labelStyle}>عدد المتابعين (Followers)</label>
