@@ -1,48 +1,18 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { Layers, Palette, Star } from 'lucide-react';
+import { useSiteSettings } from './SiteSettingsContext';
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
-
-const stats = [
-  {
-    icon: <Star size={20} />,
-    value: '1+',
-    unit: 'Year',
-    label: 'Experience',
-    color: '#4f7cff',
-    bg: 'rgba(79,124,255,0.08)',
-  },
-  {
-    icon: <Layers size={20} />,
-    value: '∞',
-    unit: '',
-    label: 'Brand Identity Design',
-    color: '#7c5cfc',
-    bg: 'rgba(124,92,252,0.08)',
-  },
-  {
-    icon: <Palette size={20} />,
-    value: '30+',
-    unit: '',
-    label: 'Social Media Posters',
-    color: '#ff6b35',
-    bg: 'rgba(255,107,53,0.08)',
-  },
-];
-
-const skills = [
-  { label: 'Brand Identity',       level: 90 },
-  { label: 'Logo Design',          level: 88 },
-  { label: 'Social Media Posters', level: 92 },
-  { label: 'Typography',           level: 85 },
-  { label: 'Color Theory',         level: 88 },
-  { label: 'Visual Direction',     level: 82 },
-];
 
 const About = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const { settings } = useSiteSettings();
+  const about = settings.about;
+
+  const iconMap = [<Star size={20} />, <Layers size={20} />, <Palette size={20} />];
+  const bgMap = ['rgba(79,124,255,0.08)', 'rgba(124,92,252,0.08)', 'rgba(255,107,53,0.08)'];
 
   return (
     <section
@@ -80,9 +50,7 @@ const About = () => {
               className="text-[38px] sm:text-[44px] font-black leading-[1.1] tracking-tight mb-6"
               style={{ color: 'var(--text-primary)' }}
             >
-              A designer who builds
-              {' '}<span className="text-gradient">memorable</span>{' '}
-              visual worlds.
+              {about.sectionTitle}
             </motion.h2>
 
             <motion.p
@@ -92,14 +60,7 @@ const About = () => {
               className="text-[16px] leading-[1.8] mb-6"
               style={{ color: 'var(--text-secondary)' }}
             >
-              I am{' '}
-              <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>
-                Mohamad Ashraf
-              </span>
-              , a graphic designer with one year of hands-on experience creating brand
-              identities and social media visuals. My work focuses on building clean,
-              memorable, and visually consistent designs that help brands look professional
-              and communicate clearly across digital platforms.
+              {about.bio1}
             </motion.p>
 
             <motion.p
@@ -109,9 +70,7 @@ const About = () => {
               className="text-[15px] leading-[1.8] mb-10"
               style={{ color: 'var(--text-muted)' }}
             >
-              Every project I take on starts with a clear understanding of the brand's voice,
-              its audience, and its goals. I then translate that understanding into visual
-              systems that are both beautiful and strategically effective.
+              {about.bio2}
             </motion.p>
 
             {/* Skills */}
@@ -121,37 +80,23 @@ const About = () => {
               transition={{ duration: 0.7, delay: 0.36, ease: easeOut }}
               className="space-y-4"
             >
-              {skills.map((skill, i) => (
-                <div key={skill.label} className="flex items-center gap-4">
-                  <span
-                    className="text-[13px] font-medium w-36 flex-shrink-0"
-                    style={{ color: 'var(--text-secondary)' }}
-                  >
+              {about.skills.map((skill, i) => (
+                <div key={skill.label} className="flex items-center gap-3">
+                  <span className="text-[13px] font-medium w-[140px] flex-shrink-0" style={{ color: 'var(--text-muted)' }}>
                     {skill.label}
                   </span>
-                  <div
-                    className="flex-1 h-1.5 rounded-full overflow-hidden"
-                    style={{ background: 'var(--bg-section-alt2)' }}
-                  >
+                  <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: 'var(--bg-card)' }}>
                     <motion.div
                       className="h-full rounded-full"
-                      style={{
-                        background:
-                          i % 3 === 0
-                            ? 'linear-gradient(90deg, #4f7cff, #7c5cfc)'
-                            : i % 3 === 1
-                            ? 'linear-gradient(90deg, #7c5cfc, #ff6b35)'
-                            : 'linear-gradient(90deg, #ff6b35, #4f7cff)',
-                      }}
                       initial={{ width: 0 }}
-                      animate={isInView ? { width: `${skill.level}%` } : { width: 0 }}
-                      transition={{ duration: 1, delay: 0.5 + i * 0.08, ease: easeOut }}
+                      animate={isInView ? { width: `${skill.level}%` } : {}}
+                      transition={{ duration: 1, delay: 0.4 + i * 0.1, ease: easeOut }}
+                      style={{
+                        background: `linear-gradient(90deg, ${['#4f7cff','#7c5cfc','#ff6b35','#C8883A','#c084fc','#ff4444'][i % 6]}, ${['#7c5cfc','#c084fc','#C8883A','#ff6b35','#4f7cff','#ff6b35'][i % 6]})`,
+                      }}
                     />
                   </div>
-                  <span
-                    className="text-[12px] font-medium w-8 text-right"
-                    style={{ color: 'var(--text-faint)' }}
-                  >
+                  <span className="text-[12px] font-semibold w-[35px] text-right" style={{ color: 'var(--text-muted)' }}>
                     {skill.level}%
                   </span>
                 </div>
@@ -168,29 +113,29 @@ const About = () => {
               transition={{ duration: 0.6, delay: 0.1, ease: easeOut }}
               className="rounded-2xl overflow-hidden relative"
               style={{
-                height: '220px',
+                height: '420px',
                 background: 'linear-gradient(145deg, var(--bg-card) 0%, var(--bg-card-end) 100%)',
                 border: '1px solid var(--border-subtle)',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
+                boxShadow: '0 8px 30px rgba(0,0,0,0.12)',
               }}
             >
               <img
-                src="/images/about-portrait.jpg"
-                alt="Mohamad Ashraf — Graphic Designer"
+                src={about.portraitImage}
+                alt={`${about.nameOverlay} — Graphic Designer`}
                 className="w-full h-full object-cover object-top"
                 onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
               />
               <div
-                className="absolute bottom-0 left-0 right-0 p-4"
-                style={{ background: 'linear-gradient(0deg, rgba(26,26,26,0.8) 0%, transparent 100%)' }}
+                className="absolute bottom-0 left-0 right-0 p-5"
+                style={{ background: 'linear-gradient(0deg, rgba(26,26,26,0.85) 0%, transparent 100%)' }}
               >
-                <div className="text-white font-bold text-[15px]">Mohamad Ashraf</div>
-                <div className="text-white/60 text-[12px]">Graphic Designer · Egypt 🇪🇬</div>
+                <div className="text-white font-bold text-[16px]">{about.nameOverlay}</div>
+                <div className="text-white/60 text-[12px] mt-0.5">{about.locationOverlay}</div>
               </div>
             </motion.div>
 
             {/* Stat cards */}
-            {stats.map((stat, i) => (
+            {about.stats.map((stat, i) => (
               <motion.div
                 key={stat.label}
                 initial={{ opacity: 0, x: 30 }}
@@ -206,9 +151,9 @@ const About = () => {
               >
                 <div
                   className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ background: stat.bg, color: stat.color }}
+                  style={{ background: bgMap[i % bgMap.length], color: stat.color }}
                 >
-                  {stat.icon}
+                  {iconMap[i % iconMap.length]}
                 </div>
                 <div>
                   <div className="flex items-baseline gap-1">
@@ -248,13 +193,12 @@ const About = () => {
               />
               <div className="text-[28px] text-white/30 font-black leading-none mb-3">"</div>
               <p className="text-[14px] text-white/80 leading-[1.7] italic">
-                Good design is not just how something looks — it's how it makes people feel
-                about a brand, instantly.
+                {about.quote}
               </p>
               <div className="mt-4 flex items-center gap-2">
                 <div className="w-6 h-px bg-[#4f7cff]" />
                 <span className="text-[11px] text-white/40 font-medium tracking-wide">
-                  Mohamad Ashraf
+                  {about.nameOverlay}
                 </span>
               </div>
             </motion.div>
