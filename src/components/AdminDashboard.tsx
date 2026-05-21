@@ -26,6 +26,41 @@ interface Project {
   isUserProject?: boolean;
 }
 
+const mapFromDb = (dbProject: any): Project => {
+  return {
+    id: dbProject.id,
+    title: dbProject.title || '',
+    category: dbProject.category || 'brand',
+    categoryLabel: dbProject.categorylabel || dbProject.categoryLabel || '',
+    description: dbProject.description || '',
+    brief: dbProject.brief || '',
+    tags: dbProject.tags || [],
+    gradient: dbProject.gradient || '',
+    accentColor: dbProject.accentcolor || dbProject.accentColor || '',
+    mockContent: dbProject.mockcontent || dbProject.mockContent || '',
+    previewImage: dbProject.previewimage || dbProject.previewImage || '',
+    additionalImages: dbProject.additionalimages || dbProject.additionalImages || [],
+    isUserProject: dbProject.isuserproject !== undefined ? dbProject.isuserproject : dbProject.isUserProject
+  };
+};
+
+const mapToDb = (project: any): any => {
+  return {
+    title: project.title,
+    category: project.category,
+    categorylabel: project.categoryLabel,
+    description: project.description,
+    brief: project.brief,
+    tags: project.tags,
+    gradient: project.gradient,
+    accentcolor: project.accentColor,
+    mockcontent: project.mockContent,
+    previewimage: project.previewImage,
+    additionalimages: project.additionalImages,
+    isuserproject: project.isUserProject
+  };
+};
+
 const USER_ACCENT_COLORS = {
   brand: ['#4f7cff', '#7c5cfc', '#C8883A', '#c084fc', '#4a9eff'],
   social: ['#ff6b35', '#FF4500', '#7c5cfc', '#ffc300', '#25d366'],
@@ -80,7 +115,7 @@ export default function AdminDashboard() {
       .order('id', { ascending: false });
     
     if (!error && data) {
-      setProjects(data);
+      setProjects(data.map(mapFromDb));
     }
     setLoadingProjects(false);
   };
@@ -219,7 +254,7 @@ export default function AdminDashboard() {
 
       const { error } = await supabase
         .from('projects')
-        .update(updatedData)
+        .update(mapToDb(updatedData))
         .eq('id', editingProject.id);
 
       if (!error) {
@@ -248,7 +283,7 @@ export default function AdminDashboard() {
         isUserProject: true
       };
 
-      const { error } = await supabase.from('projects').insert([newProject]);
+      const { error } = await supabase.from('projects').insert([mapToDb(newProject)]);
 
       if (!error) {
         fetchProjects();

@@ -157,6 +157,24 @@ const DetailModal = ({ project, onClose }: { project: Project; onClose: () => vo
   );
 };
 
+const mapFromDb = (dbProject: any): Project => {
+  return {
+    id: dbProject.id,
+    title: dbProject.title || '',
+    category: dbProject.category || 'brand',
+    categoryLabel: dbProject.categorylabel || dbProject.categoryLabel || '',
+    description: dbProject.description || '',
+    brief: dbProject.brief || '',
+    tags: dbProject.tags || [],
+    gradient: dbProject.gradient || '',
+    accentColor: dbProject.accentcolor || dbProject.accentColor || '',
+    mockContent: dbProject.mockcontent || dbProject.mockContent || '',
+    previewImage: dbProject.previewimage || dbProject.previewImage || '',
+    additionalImages: dbProject.additionalimages || dbProject.additionalImages || [],
+    isUserProject: dbProject.isuserproject !== undefined ? dbProject.isuserproject : dbProject.isUserProject
+  };
+};
+
 export default function Projects() {
   const [activeFilter, setActiveFilter] = useState<'all' | Category>('all');
   const [userProjects, setUserProjects] = useState<Project[]>([]);
@@ -175,7 +193,7 @@ export default function Projects() {
         .order('id', { ascending: false });
       
       if (!error && data) {
-        setUserProjects(data);
+        setUserProjects(data.map(mapFromDb));
       }
       setLoading(false);
     };
