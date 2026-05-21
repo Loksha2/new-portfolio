@@ -13,10 +13,10 @@ const services = [
     description:
       'Logo direction, color palette, typography, visual language, brand guidelines, and complete identity systems that make your brand instantly recognizable and deeply consistent.',
     features: ['Logo Design', 'Color Palette', 'Typography System', 'Brand Guidelines', 'Visual Language'],
-    color: '#4f7cff',
-    border: 'rgba(79,124,255,0.15)',
-    accent: 'rgba(79,124,255,0.10)',
-    hoverGradient: 'linear-gradient(135deg, rgba(79,124,255,0.07) 0%, rgba(124,92,252,0.04) 100%)',
+    color: 'var(--color-accent-blue)',
+    border: 'var(--color-accent-blue-glow)',
+    accent: 'color-mix(in oklab, var(--color-accent-blue) 10%, transparent)',
+    hoverGradient: 'linear-gradient(135deg, color-mix(in oklab, var(--color-accent-blue) 7%, transparent) 0%, color-mix(in oklab, var(--color-accent-purple) 4%, transparent) 100%)',
   },
   {
     id: 2,
@@ -26,10 +26,10 @@ const services = [
     description:
       'Creative, high-impact posts for Facebook, Instagram, campaigns, offers, announcements, and branded content that maintains visual consistency and drives engagement.',
     features: ['Instagram Posts', 'Facebook Covers', 'Campaign Visuals', 'Offer Designs', 'Story Templates'],
-    color: '#7c5cfc',
-    border: 'rgba(124,92,252,0.15)',
-    accent: 'rgba(124,92,252,0.10)',
-    hoverGradient: 'linear-gradient(135deg, rgba(124,92,252,0.07) 0%, rgba(79,124,255,0.04) 100%)',
+    color: 'var(--color-accent-purple)',
+    border: 'var(--color-accent-purple-glow)',
+    accent: 'color-mix(in oklab, var(--color-accent-purple) 10%, transparent)',
+    hoverGradient: 'linear-gradient(135deg, color-mix(in oklab, var(--color-accent-purple) 7%, transparent) 0%, color-mix(in oklab, var(--color-accent-blue) 4%, transparent) 100%)',
   },
   {
     id: 3,
@@ -39,10 +39,10 @@ const services = [
     description:
       'Moodboards, layout direction, content style frameworks, and consistent digital brand appearance strategies that give your brand a clear and cohesive visual identity across all channels.',
     features: ['Moodboards', 'Layout Direction', 'Content Style', 'Brand Consistency', 'Art Direction'],
-    color: '#ff6b35',
-    border: 'rgba(255,107,53,0.15)',
-    accent: 'rgba(255,107,53,0.10)',
-    hoverGradient: 'linear-gradient(135deg, rgba(255,107,53,0.07) 0%, rgba(255,150,80,0.04) 100%)',
+    color: 'var(--color-accent-warm)',
+    border: 'var(--color-accent-warm-glow)',
+    accent: 'color-mix(in oklab, var(--color-accent-warm) 10%, transparent)',
+    hoverGradient: 'linear-gradient(135deg, color-mix(in oklab, var(--color-accent-warm) 7%, transparent) 0%, color-mix(in oklab, var(--color-accent-purple) 4%, transparent) 100%)',
   },
 ];
 
@@ -159,7 +159,7 @@ const Services = () => {
     >
       <div
         className="absolute bottom-0 left-0 w-[400px] h-[300px] opacity-10 blur-[80px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, #7c5cfc 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, var(--color-accent-purple) 0%, transparent 70%)' }}
       />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-10" ref={ref}>
@@ -171,11 +171,11 @@ const Services = () => {
             transition={{ duration: 0.6, ease: easeOut }}
             className="flex items-center justify-center gap-3 mb-4"
           >
-            <div className="h-px w-8 bg-[#7c5cfc]" />
-            <span className="text-[12px] font-semibold text-[#7c5cfc] tracking-[0.2em] uppercase">
+            <div className="h-px w-8 bg-accent-purple" />
+            <span className="text-[12px] font-semibold text-accent-purple tracking-[0.2em] uppercase">
               What I Do
             </span>
-            <div className="h-px w-8 bg-[#7c5cfc]" />
+            <div className="h-px w-8 bg-accent-purple" />
           </motion.div>
 
           <motion.h2

@@ -27,10 +27,10 @@ const tiers: PricingTier[] = [
     tagline: 'Perfect for new businesses',
     price: '$120',
     priceNote: 'one-time',
-    color: '#4f7cff',
-    gradient: 'linear-gradient(135deg, rgba(79,124,255,0.06) 0%, rgba(124,92,252,0.04) 100%)',
-    border: 'rgba(79,124,255,0.18)',
-    accent: 'rgba(79,124,255,0.10)',
+    color: 'var(--color-accent-blue)',
+    gradient: 'linear-gradient(135deg, var(--color-accent-blue-glow) 0%, var(--color-accent-purple-glow) 100%)',
+    border: 'var(--color-accent-blue-glow)',
+    accent: 'var(--color-accent-blue-glow)',
     features: [
       'Logo design (3 concepts)',
       'Primary color palette',
@@ -48,10 +48,10 @@ const tiers: PricingTier[] = [
     tagline: 'Most popular — complete brand system',
     price: '$320',
     priceNote: 'one-time',
-    color: '#7c5cfc',
-    gradient: 'linear-gradient(135deg, rgba(124,92,252,0.10) 0%, rgba(79,124,255,0.06) 100%)',
-    border: 'rgba(124,92,252,0.25)',
-    accent: 'rgba(124,92,252,0.12)',
+    color: 'var(--color-accent-purple)',
+    gradient: 'linear-gradient(135deg, var(--color-accent-purple-glow) 0%, var(--color-accent-blue-glow) 100%)',
+    border: 'var(--color-accent-purple-glow)',
+    accent: 'var(--color-accent-purple-glow)',
     popular: true,
     features: [
       'Everything in Starter',
@@ -72,10 +72,10 @@ const tiers: PricingTier[] = [
     tagline: 'Ongoing content for your brand',
     price: '$180',
     priceNote: '/ month',
-    color: '#ff6b35',
-    gradient: 'linear-gradient(135deg, rgba(255,107,53,0.06) 0%, rgba(255,150,80,0.04) 100%)',
-    border: 'rgba(255,107,53,0.18)',
-    accent: 'rgba(255,107,53,0.10)',
+    color: 'var(--color-accent-warm)',
+    gradient: 'linear-gradient(135deg, var(--color-accent-warm-glow) 0%, var(--color-accent-purple-glow) 100%)',
+    border: 'var(--color-accent-warm-glow)',
+    accent: 'var(--color-accent-warm-glow)',
     features: [
       '12 custom social posts',
       'Facebook + Instagram formats',
@@ -104,34 +104,34 @@ const PricingCard = ({ tier, index }: { tier: PricingTier; index: number }) => {
         background: tier.popular
           ? 'linear-gradient(135deg, #1a1a1a 0%, #252525 60%, #1a1a2e 100%)'
           : 'linear-gradient(145deg, #ffffff 0%, #faf6f1 100%)',
-        border: tier.popular ? '1px solid rgba(124,92,252,0.4)' : `1px solid ${tier.border}`,
+        border: tier.popular ? '1px solid var(--color-accent-purple)' : `1px solid ${tier.border}`,
         boxShadow: tier.popular
-          ? '0 24px 80px rgba(124,92,252,0.2), 0 8px 24px rgba(0,0,0,0.15)'
+          ? '0 24px 80px var(--color-accent-purple-glow), 0 8px 24px rgba(0,0,0,0.15)'
           : '0 4px 24px rgba(0,0,0,0.04)',
       }}
       whileHover={{
         y: -8,
         boxShadow: tier.popular
-          ? `0 32px 100px rgba(124,92,252,0.3), 0 8px 24px rgba(0,0,0,0.15)`
+          ? `0 32px 100px var(--color-accent-purple-glow), 0 8px 24px rgba(0,0,0,0.15)`
           : `0 20px 60px rgba(0,0,0,0.08), 0 0 0 1px ${tier.border}`,
         transition: { duration: 0.3 },
       }}
     >
       {tier.popular && (
         <>
-          <div className="absolute top-0 right-0 w-48 h-48 opacity-20 blur-[60px] pointer-events-none rounded-2xl" style={{ background: 'radial-gradient(circle, #7c5cfc 0%, transparent 70%)' }} />
-          <div className="absolute bottom-0 left-0 w-32 h-32 opacity-15 blur-[40px] pointer-events-none rounded-2xl" style={{ background: 'radial-gradient(circle, #4f7cff 0%, transparent 70%)' }} />
+          <div className="absolute top-0 right-0 w-48 h-48 opacity-20 blur-[60px] pointer-events-none rounded-2xl" style={{ background: 'radial-gradient(circle, var(--color-accent-purple) 0%, transparent 70%)' }} />
+          <div className="absolute bottom-0 left-0 w-32 h-32 opacity-15 blur-[40px] pointer-events-none rounded-2xl" style={{ background: 'radial-gradient(circle, var(--color-accent-blue) 0%, transparent 70%)' }} />
         </>
       )}
 
       {tier.popular && (
         <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-10">
-          <motion.div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[11px] font-bold text-white tracking-wide uppercase" style={{ background: 'linear-gradient(135deg, #7c5cfc, #4f7cff)', boxShadow: '0 4px 16px rgba(124,92,252,0.5)' }} animate={{ scale: [1, 1.04, 1] }} transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}><Sparkles size={10} />Most Popular</motion.div>
+          <motion.div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[11px] font-bold text-white tracking-wide uppercase" style={{ background: 'linear-gradient(135deg, var(--color-accent-purple), var(--color-accent-blue))', boxShadow: '0 4px 16px var(--color-accent-purple-glow)' }} animate={{ scale: [1, 1.04, 1] }} transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}><Sparkles size={10} />Most Popular</motion.div>
         </div>
       )}
 
       <div className="relative z-10 mb-6">
-        <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style={{ background: tier.popular ? 'rgba(124,92,252,0.15)' : tier.accent, color: tier.color }}><Zap size={20} /></div>
+        <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style={{ background: tier.popular ? 'var(--color-accent-purple-glow)' : tier.accent, color: tier.color }}><Zap size={20} /></div>
         <div className="text-[11px] font-semibold tracking-[0.2em] uppercase mb-1" style={{ color: tier.popular ? 'rgba(255,255,255,0.45)' : tier.color }}>{tier.name}</div>
         <h3 className="text-[18px] font-bold mb-1 leading-tight" style={{ color: tier.popular ? 'white' : 'var(--text-primary)' }}>{tier.tagline}</h3>
         <div className="flex items-baseline gap-1.5 mt-4">
@@ -145,13 +145,13 @@ const PricingCard = ({ tier, index }: { tier: PricingTier; index: number }) => {
       <ul className="relative z-10 space-y-3 flex-1 mb-7">
         {tier.features.map((feature) => (
           <li key={feature} className="flex items-start gap-3">
-            <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: tier.popular ? 'rgba(124,92,252,0.2)' : tier.accent, color: tier.color }}><Check size={11} strokeWidth={2.5} /></div>
+            <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: tier.popular ? 'var(--color-accent-purple-glow)' : tier.accent, color: tier.color }}><Check size={11} strokeWidth={2.5} /></div>
             <span className="text-[13.5px] leading-snug" style={{ color: tier.popular ? 'rgba(255,255,255,0.7)' : 'var(--text-secondary)' }}>{feature}</span>
           </li>
         ))}
       </ul>
 
-      <motion.a href={tier.ctaHref} target="_blank" rel="noopener noreferrer" className="relative z-10 flex items-center justify-center gap-2 w-full py-3.5 rounded-full font-semibold text-[14px] transition-all" style={tier.popular ? { background: 'linear-gradient(135deg, #7c5cfc, #4f7cff)', color: 'white', boxShadow: '0 4px 20px rgba(124,92,252,0.4)' } : { background: 'transparent', color: tier.color, border: `1.5px solid ${tier.border}` }} whileHover={{ scale: 1.03, boxShadow: tier.popular ? '0 8px 30px rgba(124,92,252,0.55)' : `0 8px 24px ${tier.accent}` }} whileTap={{ scale: 0.97 }} data-cursor-hover>{tier.cta}<ArrowUpRight size={15} /></motion.a>
+      <motion.a href={tier.ctaHref} target="_blank" rel="noopener noreferrer" className="relative z-10 flex items-center justify-center gap-2 w-full py-3.5 rounded-full font-semibold text-[14px] transition-all" style={tier.popular ? { background: 'linear-gradient(135deg, var(--color-accent-purple), var(--color-accent-blue))', color: 'white', boxShadow: '0 4px 20px var(--color-accent-purple-glow)' } : { background: 'transparent', color: tier.color, border: `1.5px solid ${tier.border}` }} whileHover={{ scale: 1.03, boxShadow: tier.popular ? '0 8px 30px var(--color-accent-purple-glow)' : `0 8px 24px ${tier.accent}` }} whileTap={{ scale: 0.97 }} data-cursor-hover>{tier.cta}<ArrowUpRight size={15} /></motion.a>
     </motion.div>
   );
 };

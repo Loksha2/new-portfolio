@@ -10,35 +10,35 @@ const steps = [
     icon: <Search size={22} />,
     title: 'Discover',
     description: 'Deep dive into your brand, audience, competitors, and goals. Understanding the "why" before touching any design tool.',
-    color: '#4f7cff',
+    color: 'var(--color-accent-blue)',
   },
   {
     number: '02',
     icon: <Lightbulb size={22} />,
     title: 'Concept',
     description: 'Translate insights into creative directions. Mood boards, visual references, and initial concept sketches.',
-    color: '#7c5cfc',
+    color: 'var(--color-accent-purple)',
   },
   {
     number: '03',
     icon: <Paintbrush size={22} />,
     title: 'Design',
     description: 'Craft pixel-perfect visuals with intention — every color, font, and shape serves the brand strategy.',
-    color: '#ff6b35',
+    color: 'var(--color-accent-warm)',
   },
   {
     number: '04',
     icon: <RefreshCw size={22} />,
     title: 'Refine',
     description: 'Collaborative feedback rounds. Iterate until the design is exactly right — not just good enough.',
-    color: '#4f7cff',
+    color: 'var(--color-accent-blue)',
   },
   {
     number: '05',
     icon: <Send size={22} />,
     title: 'Deliver',
     description: 'Final files in all formats, brand guidelines, and ongoing support. Your brand is ready to launch.',
-    color: '#7c5cfc',
+    color: 'var(--color-accent-purple)',
   },
 ];
 
@@ -54,7 +54,7 @@ const Process = () => {
     >
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] opacity-[0.04] blur-[100px] pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse, #7c5cfc 0%, #4f7cff 50%, transparent 100%)' }}
+        style={{ background: 'radial-gradient(ellipse, var(--color-accent-purple) 0%, var(--color-accent-blue) 50%, transparent 100%)' }}
       />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-10" ref={ref}>
@@ -66,11 +66,11 @@ const Process = () => {
             transition={{ duration: 0.6, ease: easeOut }}
             className="flex items-center justify-center gap-3 mb-4"
           >
-            <div className="h-px w-8 bg-[#4f7cff]" />
-            <span className="text-[12px] font-semibold text-[#4f7cff] tracking-[0.2em] uppercase">
+            <div className="h-px w-8 bg-accent-blue" />
+            <span className="text-[12px] font-semibold text-accent-blue tracking-[0.2em] uppercase">
               How I Work
             </span>
-            <div className="h-px w-8 bg-[#4f7cff]" />
+            <div className="h-px w-8 bg-accent-blue" />
           </motion.div>
 
           <motion.h2
@@ -127,8 +127,8 @@ const Process = () => {
                   }}
                   whileHover={{
                     scale: 1.08,
-                    boxShadow: `0 8px 30px ${step.color}30`,
-                    border: `1px solid ${step.color}30`,
+                    boxShadow: `0 8px 30px color-mix(in oklab, ${step.color} 18%, transparent)`,
+                    border: `1px solid color-mix(in oklab, ${step.color} 30%, transparent)`,
                   }}
                 >
                   {step.icon}
@@ -176,11 +176,11 @@ const Process = () => {
         >
           <div
             className="absolute top-0 right-0 w-48 h-48 opacity-10 blur-[60px]"
-            style={{ background: 'radial-gradient(circle, #4f7cff 0%, transparent 70%)' }}
+            style={{ background: 'radial-gradient(circle, var(--color-accent-blue) 0%, transparent 70%)' }}
           />
           <div
             className="absolute bottom-0 left-0 w-32 h-32 opacity-10 blur-[40px]"
-            style={{ background: 'radial-gradient(circle, #7c5cfc 0%, transparent 70%)' }}
+            style={{ background: 'radial-gradient(circle, var(--color-accent-purple) 0%, transparent 70%)' }}
           />
           <div className="relative z-10">
             <div className="text-[12px] font-semibold text-white/40 tracking-[0.2em] uppercase mb-3">

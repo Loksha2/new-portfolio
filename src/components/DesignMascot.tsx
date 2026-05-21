@@ -100,9 +100,9 @@ export const DesignMascot = () => {
           <motion.div
             className="absolute -top-16 left-1/2 -translate-x-1/2 z-20 px-4 py-2.5 rounded-2xl text-[13px] font-semibold whitespace-nowrap"
             style={{
-              background: 'linear-gradient(135deg, #4f7cff, #7c5cfc)',
+              background: 'linear-gradient(135deg, var(--color-accent-blue), var(--color-accent-purple))',
               color: 'white',
-              boxShadow: '0 8px 30px rgba(79,124,255,0.4)',
+              boxShadow: '0 8px 30px var(--color-accent-blue-glow)',
               maxWidth: '220px',
               whiteSpace: 'normal',
               textAlign: 'center',
@@ -119,7 +119,7 @@ export const DesignMascot = () => {
               style={{
                 borderLeft: '8px solid transparent',
                 borderRight: '8px solid transparent',
-                borderTop: '8px solid #7c5cfc',
+                borderTop: '8px solid var(--color-accent-purple)',
               }}
             />
           </motion.div>
@@ -156,18 +156,18 @@ export const DesignMascot = () => {
           <rect x="48" y="110" width="84" height="66" rx="10" fill="url(#screenGlow)" opacity="0.6" />
 
           {/* Screen content — mini design grid */}
-          <rect x="56" y="118" width="30" height="4" rx="2" fill="#4f7cff" opacity="0.9" />
+          <rect x="56" y="118" width="30" height="4" rx="2" fill="var(--color-accent-blue)" opacity="0.9" />
           <rect x="56" y="126" width="20" height="3" rx="1.5" fill="rgba(255,255,255,0.25)" />
           <rect x="56" y="133" width="25" height="3" rx="1.5" fill="rgba(255,255,255,0.15)" />
           {/* Mini color swatches on screen */}
-          {['#4f7cff','#7c5cfc','#ff6b35','#C8883A'].map((c, i) => (
+          {['var(--color-accent-blue)','var(--color-accent-purple)','var(--color-accent-warm)','#C8883A'].map((c, i) => (
             <rect key={c} x={56 + i * 13} y="142" width="10" height="10" rx="3" fill={c} />
           ))}
           {/* Screen cursor line */}
-          <rect x="104" y="118" width="2" height="30" rx="1" fill="#4f7cff" opacity="0.5" />
-          <rect x="104" y="118" width="16" height="16" rx="3" fill="rgba(79,124,255,0.15)" stroke="#4f7cff" strokeWidth="1" />
+          <rect x="104" y="118" width="2" height="30" rx="1" fill="var(--color-accent-blue)" opacity="0.5" />
+          <rect x="104" y="118" width="16" height="16" rx="3" fill="var(--color-accent-blue-glow)" stroke="var(--color-accent-blue)" strokeWidth="1" />
           {/* Pen tool icon on screen */}
-          <path d="M108 122 L116 130 L110 136 L106 132 Z" fill="#7c5cfc" opacity="0.8" />
+          <path d="M108 122 L116 130 L110 136 L106 132 Z" fill="var(--color-accent-purple)" opacity="0.8" />
 
           {/* Home button */}
           <circle cx="90" cy="189" r="5" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
@@ -182,8 +182,8 @@ export const DesignMascot = () => {
           <ellipse cx="90" cy="32" rx="40" ry="12" fill="url(#beretGrad)" />
           <ellipse cx="90" cy="28" rx="28" ry="16" fill="url(#beretTop)" />
           {/* Beret pompom */}
-          <circle cx="90" cy="14" r="6" fill="#ff6b35" />
-          <circle cx="90" cy="14" r="3.5" fill="#ff8c5a" />
+          <circle cx="90" cy="14" r="6" fill="var(--color-accent-warm)" />
+          <circle cx="90" cy="14" r="3.5" fill="color-mix(in oklab, var(--color-accent-warm) 80%, white)" />
 
           {/* ── EYES ── */}
           {/* Eye whites */}
@@ -204,8 +204,8 @@ export const DesignMascot = () => {
                 style={{ x: eyeOffsetX, y: eyeOffsetY }}
               />
               {/* Iris accent */}
-              <motion.circle cx={72} cy={68} r="3" fill="#4f7cff" style={{ x: eyeOffsetX, y: eyeOffsetY }} />
-              <motion.circle cx={108} cy={68} r="3" fill="#4f7cff" style={{ x: eyeOffsetX, y: eyeOffsetY }} />
+              <motion.circle cx={72} cy={68} r="3" fill="var(--color-accent-blue)" style={{ x: eyeOffsetX, y: eyeOffsetY }} />
+              <motion.circle cx={108} cy={68} r="3" fill="var(--color-accent-blue)" style={{ x: eyeOffsetX, y: eyeOffsetY }} />
               {/* Eye shine */}
               <motion.circle cx={74} cy={65} r="1.5" fill="white" opacity="0.9" style={{ x: eyeOffsetX, y: eyeOffsetY }} />
               <motion.circle cx={110} cy={65} r="1.5" fill="white" opacity="0.9" style={{ x: eyeOffsetX, y: eyeOffsetY }} />
@@ -216,8 +216,8 @@ export const DesignMascot = () => {
           <path d="M78 88 Q90 96 102 88" stroke="#1a1a1a" strokeWidth="2.5" strokeLinecap="round" fill="none" />
 
           {/* ── CHEEK blush ── */}
-          <ellipse cx="60" cy="82" rx="8" ry="5" fill="#ff6b35" opacity="0.18" />
-          <ellipse cx="120" cy="82" rx="8" ry="5" fill="#ff6b35" opacity="0.18" />
+          <ellipse cx="60" cy="82" rx="8" ry="5" fill="var(--color-accent-warm)" opacity="0.18" />
+          <ellipse cx="120" cy="82" rx="8" ry="5" fill="var(--color-accent-warm)" opacity="0.18" />
 
           {/* ── ARMS ── */}
           {/* Left arm */}
@@ -226,7 +226,7 @@ export const DesignMascot = () => {
           <ellipse cx="30" cy="162" rx="11" ry="11" fill="url(#headGrad)" />
           {/* Pencil */}
           <rect x="22" y="158" width="5" height="28" rx="2.5" fill="#ffd700" transform="rotate(-20 26 165)" />
-          <path d="M19 176 L22 183 L27 178 Z" fill="#ff6b35" transform="rotate(-20 23 179)" />
+          <path d="M19 176 L22 183 L27 178 Z" fill="var(--color-accent-warm)" transform="rotate(-20 23 179)" />
           <rect x="22" y="158" width="5" height="5" rx="1" fill="#e8bfbf" transform="rotate(-20 26 165)" />
 
           {/* Right arm — waving */}
@@ -239,7 +239,7 @@ export const DesignMascot = () => {
             <ellipse cx="150" cy="162" rx="11" ry="11" fill="url(#headGrad)" />
             {/* Palette in right hand */}
             <ellipse cx="153" cy="166" rx="13" ry="11" fill="#f5f0e8" transform="rotate(-10 150 162)" />
-            {['#4f7cff','#7c5cfc','#ff6b35'].map((c, i) => (
+            {['var(--color-accent-blue)','var(--color-accent-purple)','var(--color-accent-warm)'].map((c, i) => (
               <circle key={c} cx={147 + i * 6} cy={165} r="3" fill={c} transform="rotate(-10 150 162)" />
             ))}
             <circle cx="155" cy="170" r="2.5" fill="#C8883A" transform="rotate(-10 150 162)" />
@@ -273,8 +273,8 @@ export const DesignMascot = () => {
               <stop offset="100%" stopColor="#1a1a1a" />
             </linearGradient>
             <radialGradient id="screenGlow" cx="50%" cy="0%" r="80%">
-              <stop offset="0%" stopColor="#4f7cff" stopOpacity="0.3" />
-              <stop offset="100%" stopColor="#7c5cfc" stopOpacity="0" />
+              <stop offset="0%" stopColor="var(--color-accent-blue)" stopOpacity="0.3" />
+              <stop offset="100%" stopColor="var(--color-accent-purple)" stopOpacity="0" />
             </radialGradient>
           </defs>
         </svg>

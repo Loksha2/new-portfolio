@@ -81,8 +81,8 @@ const CustomCursor = () => {
             width: 32,
             height: 32,
             borderRadius: '50%',
-            border: `1.5px solid ${isPointer ? 'rgba(79,124,255,0.55)' : 'rgba(26,26,26,0.18)'}`,
-            background: isPointer ? 'rgba(79,124,255,0.06)' : 'transparent',
+            border: `1.5px solid ${isPointer ? 'color-mix(in oklab, var(--color-accent-blue) 55%, transparent)' : 'rgba(26,26,26,0.18)'}`,
+            background: isPointer ? 'color-mix(in oklab, var(--color-accent-blue) 6%, transparent)' : 'transparent',
             transition: 'border-color 0.2s, background 0.2s',
           }}
         />
@@ -111,7 +111,7 @@ const CustomCursor = () => {
           xmlns="http://www.w3.org/2000/svg"
           style={{
             filter: isPointer
-              ? 'drop-shadow(0 0 5px rgba(79,124,255,0.6)) drop-shadow(0 1px 2px rgba(0,0,0,0.4))'
+              ? 'drop-shadow(0 0 5px color-mix(in oklab, var(--color-accent-blue) 60%, transparent)) drop-shadow(0 1px 2px rgba(0,0,0,0.4))'
               : 'drop-shadow(0 1px 2px rgba(0,0,0,0.4))',
             transition: 'filter 0.2s ease',
           }}
@@ -119,8 +119,8 @@ const CustomCursor = () => {
           {/* Arrow pointer shape — classic cursor */}
           <path
             d="M1 1 L1 25 L7.5 19 L13 30 L17 28 L11.5 17.5 L20 17.5 Z"
-            fill={isPointer ? '#2a5cee' : '#1a1a1a'}
-            stroke={isPointer ? '#4f7cff' : '#fff'}
+            fill={isPointer ? 'color-mix(in oklab, var(--color-accent-blue) 80%, black)' : '#1a1a1a'}
+            stroke={isPointer ? 'var(--color-accent-blue)' : '#fff'}
             strokeWidth="2"
             strokeLinejoin="round"
             strokeLinecap="round"

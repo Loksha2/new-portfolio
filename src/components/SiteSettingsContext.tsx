@@ -102,6 +102,19 @@ interface ContactSettings {
   statusItems: string[];
 }
 
+export interface InstagramHighlight {
+  label: string;
+  img: string;
+}
+
+export interface InstagramSettings {
+  bioTitle: string;
+  bioDescription: string;
+  followersCount: string;
+  followingCount: string;
+  highlights: InstagramHighlight[];
+}
+
 export interface SiteSettings {
   general: GeneralSettings;
   hero: HeroSettings;
@@ -110,6 +123,7 @@ export interface SiteSettings {
   pricing: PricingSettings;
   faq: FaqSettings;
   contact: ContactSettings;
+  instagram: InstagramSettings;
 }
 
 interface SiteSettingsContextValue {
@@ -311,6 +325,19 @@ const defaultContact: ContactSettings = {
   ]
 };
 
+const defaultInstagram: InstagramSettings = {
+  bioTitle: "مصمم جرافيك | هويات بصرية وسوشيال ميديا 🎨",
+  bioDescription: "تصاميم تجذب الانتباه وتترك بصمة فريدة. تواصل معي لتنفيذ مشروعك القادم! 🔥",
+  followersCount: "12.5K",
+  followingCount: "480",
+  highlights: [
+    { label: "Branding", img: "/images/social_tech_post.png" },
+    { label: "Feed 📱", img: "/images/social_fashion_post.png" },
+    { label: "Campaigns", img: "/images/social_coffee_post.png" },
+    { label: "Concepts", img: "/images/social_sport_post.png" }
+  ]
+};
+
 const defaultSettings: SiteSettings = {
   general: defaultGeneral,
   hero: defaultHero,
@@ -318,7 +345,8 @@ const defaultSettings: SiteSettings = {
   services: defaultServices,
   pricing: defaultPricing,
   faq: defaultFaq,
-  contact: defaultContact
+  contact: defaultContact,
+  instagram: defaultInstagram
 };
 
 // ─── Context ─────────────────────────────────────────────────────────────────

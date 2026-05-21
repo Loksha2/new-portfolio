@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { ExternalLink, X, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import { supabase } from '../supabaseClient'; // جلب كلاينت السيرفر
+import InstagramGridSimulator from './InstagramGridSimulator';
 
 type Category = 'brand' | 'social';
 
@@ -24,6 +25,15 @@ interface Project {
 
 const STATIC_PROJECTS: Project[] = [];
 
+const getDynamicColor = (color: string) => {
+  if (!color) return 'var(--color-accent-blue)';
+  const lowerColor = color.toLowerCase();
+  if (lowerColor === '#4f7cff') return 'var(--color-accent-blue)';
+  if (lowerColor === '#7c5cfc') return 'var(--color-accent-purple)';
+  if (lowerColor === '#ff6b35') return 'var(--color-accent-warm)';
+  return color;
+};
+
 const DetailModal = ({ project, onClose }: { project: Project; onClose: () => void }) => {
   const [currentImg, setCurrentImg] = useState(0);
   const allImages: string[] = [];
@@ -36,7 +46,15 @@ const DetailModal = ({ project, onClose }: { project: Project; onClose: () => vo
     return () => { document.body.style.overflow = ''; };
   }, []);
 
-  const accent = project.accentColor;
+  useEffect(() => {
+    // Preload all images in the background to avoid any download lag
+    allImages.forEach(src => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, [allImages]);
+
+  const accent = getDynamicColor(project.accentColor || '#4f7cff');
 
   return (
     <AnimatePresence>
@@ -44,16 +62,27 @@ const DetailModal = ({ project, onClose }: { project: Project; onClose: () => vo
         <div className="absolute inset-0 bg-black/85 backdrop-blur-sm" onClick={onClose} />
         <motion.div 
           initial={{ y: 40, opacity: 0, scale: 0.96 }} animate={{ y: 0, opacity: 1, scale: 1 }} exit={{ y: 20, opacity: 0, scale: 0.97 }}
-          className="relative z-10 w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl bg-[#1c1c22] border border-white/5"
+          className="relative z-10 w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl bg-[#1c1c22] border border-white/5 scrollbar-none"
         >
-          <button onClick={onClose} className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-black/20 flex items-center justify-center text-white"><X size={16} /></button>
+          <button onClick={onClose} className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-black/50 hover:bg-black/80 flex items-center justify-center text-white transition-colors"><X size={16} /></button>
           {allImages.length > 0 && (
-            <div className="relative w-full overflow-hidden rounded-t-3xl h-[340px]">
-              <img src={allImages[currentImg]} alt="" className="w-full h-full object-cover" />
+            <div className="relative w-full flex items-center justify-center bg-black/45 p-4 md:p-6 rounded-t-3xl min-h-[300px] overflow-hidden">
+              {allImages.map((imgUrl, idx) => (
+                <img
+                  key={imgUrl}
+                  src={imgUrl}
+                  alt=""
+                  className={`max-w-full max-h-[65vh] h-auto object-contain rounded-2xl shadow-2xl border border-white/10 transition-all duration-300 ${
+                    idx === currentImg
+                      ? 'opacity-100 relative z-10 scale-100'
+                      : 'opacity-0 absolute pointer-events-none z-0 scale-95'
+                  }`}
+                />
+              ))}
               {allImages.length > 1 && (
                 <>
-                  <button onClick={() => setCurrentImg(i => Math.max(0, i - 1))} className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 flex items-center justify-center text-white"><ChevronLeft size={18} /></button>
-                  <button onClick={() => setCurrentImg(i => Math.min(allImages.length - 1, i + 1))} className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/40 flex items-center justify-center text-white"><ChevronRight size={18} /></button>
+                  <button onClick={() => setCurrentImg(i => Math.max(0, i - 1))} className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center text-white transition-colors z-20"><ChevronLeft size={18} /></button>
+                  <button onClick={() => setCurrentImg(i => Math.min(allImages.length - 1, i + 1))} className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center text-white transition-colors z-20"><ChevronRight size={18} /></button>
                 </>
               )}
             </div>
@@ -103,6 +132,7 @@ export default function Projects() {
   const [userProjects, setUserProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [detailProject, setDetailProject] = useState<Project | null>(null);
+  const [viewMode, setViewMode] = useState<'grid' | 'instagram'>('grid');
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
@@ -123,6 +153,15 @@ export default function Projects() {
     loadCloudProjects();
   }, []);
 
+  // Switch default view mode when category changes
+  useEffect(() => {
+    if (activeFilter === 'social') {
+      setViewMode('instagram');
+    } else {
+      setViewMode('grid');
+    }
+  }, [activeFilter]);
+
   const allProjects = [...STATIC_PROJECTS, ...userProjects];
   const filtered = activeFilter === 'all' ? allProjects : allProjects.filter(p => p.category === activeFilter);
 
@@ -131,6 +170,8 @@ export default function Projects() {
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-black mb-4" style={{ color: 'var(--text-primary)' }}>Selected <span className="text-gradient">Projects</span></h2>
+          
+          {/* Main Filter Buttons */}
           <div className="flex items-center justify-center gap-2 flex-wrap mt-6">
             {(['all', 'brand', 'social'] as const).map(f => (
               <button key={f} onClick={() => setActiveFilter(f)} className={`px-5 py-2 rounded-full text-xs font-bold border transition-all ${activeFilter === f ? 'bg-white text-black' : 'bg-transparent text-gray-400 border-white/10 hover:border-white/20'}`}>
@@ -138,13 +179,36 @@ export default function Projects() {
               </button>
             ))}
           </div>
+
+          {/* Sub-toggle for Social Media View Mode */}
+          {activeFilter === 'social' && (
+            <div className="flex items-center justify-center gap-2 mt-5 text-xs">
+              <button 
+                onClick={() => setViewMode('instagram')} 
+                className={`px-4 py-1.5 rounded-full border transition-all font-semibold ${viewMode === 'instagram' ? 'bg-[var(--color-accent-blue)] border-[var(--color-accent-blue)] text-white shadow-lg' : 'bg-transparent text-gray-400 border-white/10 hover:border-white/20'}`}
+              >
+                📱 محاكي انستجرام
+              </button>
+              <button 
+                onClick={() => setViewMode('grid')} 
+                className={`px-4 py-1.5 rounded-full border transition-all font-semibold ${viewMode === 'grid' ? 'bg-white text-black border-white shadow-lg' : 'bg-transparent text-gray-400 border-white/10 hover:border-white/20'}`}
+              >
+                🎨 شبكة المشاريع
+              </button>
+            </div>
+          )}
         </div>
 
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 gap-2 text-gray-400">
-            <Loader2 size={24} className="animate-spin text-[#4f7cff]" />
+            <Loader2 size={24} className="animate-spin text-accent-blue" />
             <p className="text-xs">جاري تحميل أحدث أعمال محمد أشرف السحابية...</p>
           </div>
+        ) : activeFilter === 'social' && viewMode === 'instagram' ? (
+          <InstagramGridSimulator 
+            projects={allProjects} 
+            onSelectProject={(project) => setDetailProject(project)} 
+          />
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filtered.map((project, i) => {

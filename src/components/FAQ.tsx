@@ -120,27 +120,27 @@ const AccordionItem = ({
         background: isOpen
           ? 'linear-gradient(145deg, var(--bg-card) 0%, var(--bg-card-end) 100%)'
           : 'var(--bg-card)',
-        border: isOpen ? '1px solid #4f7cff40' : '1px solid var(--border-subtle)',
-        boxShadow: isOpen ? '0 10px 30px -15px rgba(79, 124, 255, 0.15)' : 'none',
+        border: isOpen ? '1px solid var(--color-accent-blue-glow)' : '1px solid var(--border-subtle)',
+        boxShadow: isOpen ? '0 10px 30px -15px var(--color-accent-blue-glow)' : 'none',
       }}
     >
       <button
         onClick={onClick}
         className="w-full text-left p-6 md:p-7 flex items-center justify-between gap-4 font-semibold text-[15px] sm:text-[17px] transition-colors"
-        style={{ color: isOpen ? '#4f7cff' : 'var(--text-primary)' }}
+        style={{ color: isOpen ? 'var(--color-accent-blue)' : 'var(--text-primary)' }}
         data-cursor-hover
       >
         <span className="flex items-center gap-3">
-          <HelpCircle size={18} className={isOpen ? 'text-[#4f7cff]' : 'text-gray-400'} />
+          <HelpCircle size={18} className={isOpen ? 'text-[var(--color-accent-blue)]' : 'text-gray-400'} />
           {question}
         </span>
         <motion.div
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.3, ease: easeOut }}
           className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
-          style={{ background: isOpen ? '#4f7cff1a' : 'var(--bg-section-alt2)' }}
+          style={{ background: isOpen ? 'var(--color-accent-blue-glow)' : 'var(--bg-section-alt2)' }}
         >
-          <ChevronDown size={16} className={isOpen ? 'text-[#4f7cff]' : 'var(--text-muted)'} />
+          <ChevronDown size={16} className={isOpen ? 'text-[var(--color-accent-blue)]' : 'var(--text-muted)'} />
         </motion.div>
       </button>
 
@@ -185,11 +185,11 @@ const FAQ = () => {
       {/* Dynamic Background Glow */}
       <div
         className="absolute top-1/4 right-0 w-[500px] h-[500px] opacity-[0.03] blur-[120px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, #7c5cfc 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, var(--color-accent-purple) 0%, transparent 70%)' }}
       />
       <div
         className="absolute bottom-12 left-10 w-[400px] h-[400px] opacity-[0.03] blur-[100px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, #4f7cff 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, var(--color-accent-blue) 0%, transparent 70%)' }}
       />
 
       <div className="max-w-4xl mx-auto px-6" ref={ref}>
@@ -201,11 +201,11 @@ const FAQ = () => {
             transition={{ duration: 0.6, ease: easeOut }}
             className="flex items-center justify-center gap-3 mb-4"
           >
-            <div className="h-px w-8 bg-[#4f7cff]" />
-            <span className="text-[12px] font-semibold text-[#4f7cff] tracking-[0.2em] uppercase">
+            <div className="h-px w-8 bg-[var(--color-accent-blue)]" />
+            <span className="text-[12px] font-semibold text-[var(--color-accent-blue)] tracking-[0.2em] uppercase">
               Got Questions?
             </span>
-            <div className="h-px w-8 bg-[#4f7cff]" />
+            <div className="h-px w-8 bg-[var(--color-accent-blue)]" />
           </motion.div>
 
           <motion.h2
@@ -252,9 +252,9 @@ const FAQ = () => {
                 }}
                 className="flex items-center gap-2 px-5 py-2.5 rounded-full text-[13px] font-bold border transition-all duration-300 relative overflow-hidden"
                 style={{
-                  background: isActive ? '#4f7cff12' : 'var(--bg-card)',
-                  borderColor: isActive ? '#4f7cff' : 'var(--border-subtle)',
-                  color: isActive ? '#4f7cff' : 'var(--text-secondary)',
+                  background: isActive ? 'var(--color-accent-blue-glow)' : 'var(--bg-card)',
+                  borderColor: isActive ? 'var(--color-accent-blue)' : 'var(--border-subtle)',
+                  color: isActive ? 'var(--color-accent-blue)' : 'var(--text-secondary)',
                 }}
                 data-cursor-hover
               >
@@ -315,7 +315,7 @@ const FAQ = () => {
             href="#contact"
             className="flex items-center gap-2 text-[13px] font-bold text-white px-5 py-2.5 rounded-full transition-all duration-300 shadow-md"
             style={{
-              background: 'linear-gradient(90deg, #4f7cff, #7c5cfc)',
+              background: 'linear-gradient(90deg, var(--color-accent-blue), var(--color-accent-purple))',
             }}
             data-cursor-hover
           >

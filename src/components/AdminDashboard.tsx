@@ -8,6 +8,24 @@ import {
   DollarSign, HelpCircle, Phone, Settings,
   Upload, GripVertical
 } from 'lucide-react';
+
+const InstagramIcon = ({ size = 18 }: { size?: number }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+  </svg>
+);
 import { supabase } from '../supabaseClient'; // الربط مع الكلاينت الجديد
 import { useSiteSettings } from './SiteSettingsContext';
 
@@ -174,7 +192,7 @@ const sectionDescStyle: React.CSSProperties = {
 
 // ─── Tab types ───────────────────────────────────────────────────────────────
 
-type TabId = 'dashboard' | 'projects' | 'hero' | 'about' | 'services' | 'pricing' | 'faq' | 'contact' | 'general';
+type TabId = 'dashboard' | 'projects' | 'instagram' | 'hero' | 'about' | 'services' | 'pricing' | 'faq' | 'contact' | 'general';
 
 interface SidebarTab {
   id: TabId;
@@ -185,6 +203,7 @@ interface SidebarTab {
 const sidebarTabs: SidebarTab[] = [
   { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard size={18} /> },
   { id: 'projects', label: 'Projects', icon: <FolderOpen size={18} /> },
+  { id: 'instagram', label: 'Instagram Simulator', icon: <InstagramIcon size={18} /> },
   { id: 'hero', label: 'Hero Section', icon: <Crosshair size={18} /> },
   { id: 'about', label: 'About Me', icon: <User size={18} /> },
   { id: 'services', label: 'Services', icon: <Briefcase size={18} /> },
@@ -1201,6 +1220,112 @@ function GeneralEditor() {
   );
 }
 
+function InstagramEditor() {
+  const { settings, updateSection } = useSiteSettings();
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  const [bioTitle, setBioTitle] = useState('');
+  const [bioDescription, setBioDescription] = useState('');
+  const [followersCount, setFollowersCount] = useState('');
+  const [followingCount, setFollowingCount] = useState('');
+  const [highlights, setHighlights] = useState<{ label: string; img: string }[]>([]);
+
+  useEffect(() => {
+    const inst = settings.instagram;
+    if (inst) {
+      setBioTitle(inst.bioTitle || '');
+      setBioDescription(inst.bioDescription || '');
+      setFollowersCount(inst.followersCount || '');
+      setFollowingCount(inst.followingCount || '');
+      setHighlights(inst.highlights?.map(h => ({ ...h })) || []);
+    }
+  }, [settings.instagram]);
+
+  const handleSave = async () => {
+    setSaving(true);
+    setSaved(false);
+    try {
+      await updateSection('instagram', { bioTitle, bioDescription, followersCount, followingCount, highlights });
+      setSaved(true);
+      setTimeout(() => setSaved(false), 3000);
+    } catch {
+      alert('حدث خطأ أثناء حفظ بيانات انستجرام!');
+    }
+    setSaving(false);
+  };
+
+  const updateHighlight = (i: number, key: 'label' | 'img', val: string) => {
+    const next = [...highlights];
+    next[i] = { ...next[i], [key]: val };
+    setHighlights(next);
+  };
+
+  return (
+    <div>
+      <h2 style={sectionTitleStyle}>Instagram Simulator</h2>
+      <p style={sectionDescStyle}>التحكم في بيانات محاكي انستجرام المعروض على الموقع</p>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div style={cardStyle}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+            <div>
+              <label style={labelStyle}>عدد المتابعين (Followers)</label>
+              <input style={inputStyle} value={followersCount} onChange={e => setFollowersCount(e.target.value)} placeholder="مثال: 12.5K" />
+            </div>
+            <div>
+              <label style={labelStyle}>يتابعهم (Following)</label>
+              <input style={inputStyle} value={followingCount} onChange={e => setFollowingCount(e.target.value)} placeholder="مثال: 480" />
+            </div>
+          </div>
+          <div style={{ marginBottom: '16px' }}>
+            <label style={labelStyle}>العنوان الفرعي للسيرة الذاتية (Bio Title)</label>
+            <input style={inputStyle} value={bioTitle} onChange={e => setBioTitle(e.target.value)} placeholder="مثال: مصمم جرافيك | هويات بصرية وسوشيال ميديا 🎨" />
+          </div>
+          <div>
+            <label style={labelStyle}>الوصف والسيرة الذاتية (Bio Description)</label>
+            <textarea style={textareaStyle} value={bioDescription} onChange={e => setBioDescription(e.target.value)} placeholder="اكتب نبذة تظهر في المحاكي..." />
+          </div>
+        </div>
+
+        {/* Highlights List */}
+        <div style={cardStyle}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+            <label style={{ ...labelStyle, marginBottom: 0 }}>قصص انستجرام البارزة (Story Highlights)</label>
+            <button type="button" onClick={() => setHighlights(prev => [...prev, { label: '', img: '' }])} style={secondaryBtnStyle}>
+              <Plus size={14} /> إضافة هايلايت
+            </button>
+          </div>
+          {highlights.map((hl, i) => (
+            <div key={i} style={{ border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px', padding: '16px', marginBottom: '12px', background: 'rgba(255,255,255,0.01)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                <span style={{ fontSize: '12px', fontWeight: 700, color: '#9ca3af' }}>هايلايت #{i + 1}</span>
+                <button type="button" onClick={() => setHighlights(prev => prev.filter((_, idx) => idx !== i))} style={dangerBtnStyle}>
+                  <Trash2 size={14} /> حذف الهايلايت
+                </button>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '16px', alignItems: 'end' }}>
+                <div>
+                  <label style={labelStyle}>اسم الهايلايت</label>
+                  <input style={inputStyle} value={hl.label} onChange={e => updateHighlight(i, 'label', e.target.value)} placeholder="مثال: Branding" />
+                </div>
+                <div>
+                  <ImageUploadButton label="صورة الهايلايت" value={hl.img} onChange={url => updateHighlight(i, 'img', url)} />
+                </div>
+              </div>
+            </div>
+          ))}
+          {highlights.length === 0 && <p style={{ fontSize: '13px', color: '#6b7280', textAlign: 'center', padding: '16px 0' }}>لا توجد هايلايتس معروضة حالياً.</p>}
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <SaveButton saving={saving} saved={saved} onClick={handleSave} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // MAIN ADMIN DASHBOARD
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -1552,6 +1677,8 @@ export default function AdminDashboard() {
         return <HeroEditor />;
       case 'about':
         return <AboutEditor />;
+      case 'instagram':
+        return <InstagramEditor />;
       case 'services':
         return <ServicesEditor />;
       case 'pricing':

@@ -13,10 +13,10 @@ const MarqueeRow = ({ items, reverse = false }: { items: string[]; reverse?: boo
           key={i}
           className={
             item === '✦'
-              ? 'text-[#4f7cff] text-[10px]'
+              ? 'text-[var(--color-accent-blue)] text-[10px]'
               : 'text-[13px] font-semibold tracking-wide uppercase'
           }
-          style={{ color: item === '✦' ? '#4f7cff' : 'var(--text-muted)' }}
+          style={{ color: item === '✦' ? 'var(--color-accent-blue)' : 'var(--text-muted)' }}
         >
           {item}
         </span>

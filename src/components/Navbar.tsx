@@ -80,7 +80,7 @@ const Navbar = () => {
                     fill="white"
                     strokeWidth="0"
                   />
-                  <circle cx="4.5" cy="20" r="1.2" fill="#4f7cff" />
+                  <circle cx="4.5" cy="20" r="1.2" fill="var(--color-accent-blue)" />
                 </svg>
               </div>
             )}
@@ -105,7 +105,7 @@ const Navbar = () => {
               >
                 {link.label}
                 <span
-                  className="absolute inset-x-2 -bottom-0.5 h-px bg-gradient-to-r from-[#4f7cff] to-[#7c5cfc]
+                  className="absolute inset-x-2 -bottom-0.5 h-px bg-gradient-to-r from-[var(--color-accent-blue)] to-[var(--color-accent-purple)]
                   scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full"
                 />
               </motion.a>

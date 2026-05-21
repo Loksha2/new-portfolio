@@ -51,7 +51,7 @@ const Contact = () => {
     <section id="contact" className="section-padding relative overflow-hidden" style={{ background: 'transparent' }}>
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] opacity-[0.05] blur-[100px]"
-          style={{ background: 'radial-gradient(ellipse, #4f7cff 0%, #7c5cfc 50%, transparent 100%)' }} />
+          style={{ background: 'radial-gradient(ellipse, var(--color-accent-blue) 0%, var(--color-accent-purple) 50%, transparent 100%)' }} />
       </div>
 
       <div className="max-w-5xl mx-auto px-6 lg:px-10" ref={ref}>
@@ -61,15 +61,15 @@ const Contact = () => {
           className="rounded-3xl overflow-hidden relative"
           style={{ background: 'linear-gradient(135deg, #1a1a1a 0%, #252525 50%, #1a1a2e 100%)', boxShadow: '0 30px 80px rgba(0,0,0,0.25)' }}
         >
-          <div className="absolute top-0 right-0 w-80 h-80 opacity-15 blur-[80px]" style={{ background: 'radial-gradient(circle, #4f7cff 0%, transparent 70%)' }} />
-          <div className="absolute bottom-0 left-0 w-60 h-60 opacity-10 blur-[60px]" style={{ background: 'radial-gradient(circle, #7c5cfc 0%, transparent 70%)' }} />
+          <div className="absolute top-0 right-0 w-80 h-80 opacity-15 blur-[80px]" style={{ background: 'radial-gradient(circle, var(--color-accent-blue) 0%, transparent 70%)' }} />
+          <div className="absolute bottom-0 left-0 w-60 h-60 opacity-10 blur-[60px]" style={{ background: 'radial-gradient(circle, var(--color-accent-purple) 0%, transparent 70%)' }} />
           <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
 
           <div className="relative z-10 px-8 py-14 md:px-14 md:py-16 text-center">
             <motion.div initial={{ opacity: 0, y: 15 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6, delay: 0.15, ease: easeOut }} className="flex items-center justify-center gap-2 mb-6">
-              <div className="h-px w-8 bg-[#4f7cff]" />
-              <span className="text-[11px] font-semibold text-[#4f7cff] tracking-[0.25em] uppercase">Let's Work Together</span>
-              <div className="h-px w-8 bg-[#4f7cff]" />
+              <div className="h-px w-8 bg-[var(--color-accent-blue)]" />
+              <span className="text-[11px] font-semibold text-[var(--color-accent-blue)] tracking-[0.25em] uppercase">Let's Work Together</span>
+              <div className="h-px w-8 bg-[var(--color-accent-blue)]" />
             </motion.div>
 
             <motion.h2 initial={{ opacity: 0, y: 25 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7, delay: 0.2, ease: easeOut }}

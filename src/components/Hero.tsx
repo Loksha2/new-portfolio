@@ -44,9 +44,9 @@ const FloatingElements = () => (
   <div className="absolute inset-0 pointer-events-none overflow-hidden">
     {/* Radial glows */}
     <div className="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full opacity-25 blur-[120px]"
-      style={{ background: 'radial-gradient(circle, rgba(124,92,252,0.3) 0%, transparent 70%)' }} />
+      style={{ background: 'radial-gradient(circle, var(--color-accent-purple-glow) 0%, transparent 70%)' }} />
     <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] rounded-full opacity-15 blur-[100px]"
-      style={{ background: 'radial-gradient(circle, rgba(79,124,255,0.25) 0%, transparent 70%)' }} />
+      style={{ background: 'radial-gradient(circle, var(--color-accent-blue-glow) 0%, transparent 70%)' }} />
 
     {/* Animated dot grid */}
     <div className="absolute inset-0 opacity-[0.022]"
@@ -57,10 +57,10 @@ const FloatingElements = () => (
 
     {/* Floating accent pills */}
     {[
-      { label: 'Logo Design ✦',     top: '12%', left: '6%',  delay: 0,   color: '#4f7cff' },
-      { label: 'Brand Identity ✦',  top: '70%', left: '3%',  delay: 1.2, color: '#7c5cfc' },
-      { label: 'Social Media ✦',    top: '18%', right: '4%', delay: 0.6, color: '#ff6b35' },
-      { label: 'Typography ✦',      top: '75%', right: '5%', delay: 1.8, color: '#C8883A' },
+      { label: 'Logo Design ✦',     top: '12%', left: '6%',  delay: 0,   color: 'var(--color-accent-blue)' },
+      { label: 'Brand Identity ✦',  top: '70%', left: '3%',  delay: 1.2, color: 'var(--color-accent-purple)' },
+      { label: 'Social Media ✦',    top: '18%', right: '4%', delay: 0.6, color: 'var(--color-accent-warm)' },
+      { label: 'Typography ✦',      top: '75%', right: '5%', delay: 1.8, color: 'var(--color-accent-purple)' },
     ].map((item) => (
       <motion.div
         key={item.label}
@@ -69,8 +69,8 @@ const FloatingElements = () => (
           top: item.top,
           left: (item as any).left,
           right: (item as any).right,
-          background: `${item.color}12`,
-          border: `1px solid ${item.color}30`,
+          background: `color-mix(in oklab, ${item.color} 8%, transparent)`,
+          border: `1px solid color-mix(in oklab, ${item.color} 20%, transparent)`,
           color: item.color,
           backdropFilter: 'blur(8px)',
         }}
@@ -82,6 +82,14 @@ const FloatingElements = () => (
     ))}
   </div>
 );
+
+const getDynamicColor = (color: string) => {
+  const c = color?.toLowerCase();
+  if (c === '#4f7cff') return 'var(--color-accent-blue)';
+  if (c === '#7c5cfc') return 'var(--color-accent-purple)';
+  if (c === '#ff6b35') return 'var(--color-accent-warm)';
+  return color;
+};
 
 // ─── HERO ────────────────────────────────────────────────────────────────────
 const Hero = ({ isVisible = true }: { isVisible?: boolean }) => {
@@ -194,7 +202,7 @@ const Hero = ({ isVisible = true }: { isVisible?: boolean }) => {
                   <div key={stat.label} className="flex flex-col">
                     <span
                       className="text-[32px] font-black leading-none"
-                      style={{ color: stat.color }}
+                      style={{ color: getDynamicColor(stat.color) }}
                     >
                       {typeof numericVal === 'number' ? (
                         <AnimatedCounter target={numericVal} suffix={suffix} />
@@ -237,7 +245,7 @@ const Hero = ({ isVisible = true }: { isVisible?: boolean }) => {
                 transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
               >
                 <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ background: 'rgba(79,124,255,0.1)', color: '#4f7cff' }}>
+                  style={{ background: 'var(--color-accent-blue-glow)', color: 'var(--color-accent-blue)' }}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <rect x="3" y="3" width="18" height="18" rx="3"/>
                     <path d="M9 9h6M9 13h4"/>
@@ -262,7 +270,7 @@ const Hero = ({ isVisible = true }: { isVisible?: boolean }) => {
                 transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
               >
                 <div className="flex gap-1.5">
-                  {['#4f7cff','#7c5cfc','#ff6b35','#C8883A','#1a1a1a'].map((c) => (
+                  {['var(--color-accent-blue)','var(--color-accent-purple)','var(--color-accent-warm)','var(--color-accent-purple)','#1a1a1a'].map((c) => (
                     <div key={c} className="w-5 h-5 rounded-full border-2 border-white/20 shadow-sm" style={{ background: c }} />
                   ))}
                 </div>
@@ -273,8 +281,8 @@ const Hero = ({ isVisible = true }: { isVisible?: boolean }) => {
               <motion.div
                 className="rounded-2xl px-4 py-3"
                 style={{
-                  background: 'linear-gradient(135deg, #4f7cff, #7c5cfc)',
-                  boxShadow: '0 8px 30px rgba(79,124,255,0.35)',
+                  background: 'linear-gradient(135deg, var(--color-accent-blue), var(--color-accent-purple))',
+                  boxShadow: '0 8px 30px var(--color-accent-blue-glow)',
                 }}
                 animate={{ scale: [1, 1.04, 1] }}
                 transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}

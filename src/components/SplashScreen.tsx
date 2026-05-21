@@ -38,11 +38,11 @@ const SplashScreen = ({ onDone }: { onDone: () => void }) => {
             >
               <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
                 <rect width="56" height="56" rx="16" fill="url(#splashGrad)" />
-                <path
+                 <path
                   d="M38 12 L46 20 L26 40 L14 44 L18 32 Z"
                   fill="white"
                 />
-                <circle cx="15" cy="43" r="3" fill="#4f7cff" />
+                <circle cx="15" cy="43" r="3" fill="var(--color-accent-blue)" />
                 <defs>
                   <linearGradient id="splashGrad" x1="0" y1="0" x2="1" y2="1">
                     <stop offset="0%" stopColor="#1a1a1a" />
@@ -76,7 +76,7 @@ const SplashScreen = ({ onDone }: { onDone: () => void }) => {
             >
               <motion.div
                 className="h-full rounded-full"
-                style={{ background: 'linear-gradient(90deg, #4f7cff, #7c5cfc, #ff6b35)' }}
+                style={{ background: 'linear-gradient(90deg, var(--color-accent-blue), var(--color-accent-purple), var(--color-accent-warm))' }}
                 initial={{ width: '0%' }}
                 animate={{ width: '100%' }}
                 transition={{ duration: 1.4, delay: 0.4, ease: 'easeInOut' }}

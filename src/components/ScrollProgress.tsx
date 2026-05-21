@@ -26,8 +26,8 @@ const ScrollProgress = () => {
         className="h-full"
         style={{
           width: `${progress}%`,
-          background: 'linear-gradient(90deg, #4f7cff 0%, #7c5cfc 50%, #ff6b35 100%)',
-          boxShadow: '0 0 8px rgba(124,92,252,0.6)',
+          background: 'linear-gradient(90deg, var(--color-accent-blue) 0%, var(--color-accent-purple) 50%, var(--color-accent-warm) 100%)',
+          boxShadow: '0 0 8px var(--color-accent-purple)',
         }}
         transition={{ duration: 0.05 }}
       />

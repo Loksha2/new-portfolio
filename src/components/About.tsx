@@ -5,6 +5,14 @@ import { useSiteSettings } from './SiteSettingsContext';
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
+const getDynamicColor = (color: string) => {
+  const c = color?.toLowerCase();
+  if (c === '#4f7cff') return 'var(--color-accent-blue)';
+  if (c === '#7c5cfc') return 'var(--color-accent-purple)';
+  if (c === '#ff6b35') return 'var(--color-accent-warm)';
+  return color;
+};
+
 const About = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
@@ -12,7 +20,7 @@ const About = () => {
   const about = settings.about;
 
   const iconMap = [<Star size={20} />, <Layers size={20} />, <Palette size={20} />];
-  const bgMap = ['rgba(79,124,255,0.08)', 'rgba(124,92,252,0.08)', 'rgba(255,107,53,0.08)'];
+  const bgMap = ['var(--color-accent-blue-glow)', 'var(--color-accent-purple-glow)', 'var(--color-accent-warm-glow)'];
 
   return (
     <section
@@ -23,7 +31,7 @@ const About = () => {
       {/* Decorative bg */}
       <div
         className="absolute top-0 right-0 w-[400px] h-[400px] opacity-10 blur-[80px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, #4f7cff 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, var(--color-accent-blue) 0%, transparent 70%)' }}
       />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-10" ref={ref}>
@@ -34,8 +42,8 @@ const About = () => {
           transition={{ duration: 0.6, ease: easeOut }}
           className="flex items-center gap-3 mb-4"
         >
-          <div className="h-px w-8 bg-[#4f7cff]" />
-          <span className="text-[12px] font-semibold text-[#4f7cff] tracking-[0.2em] uppercase">
+          <div className="h-px w-8 bg-[var(--color-accent-blue)]" />
+          <span className="text-[12px] font-semibold text-[var(--color-accent-blue)] tracking-[0.2em] uppercase">
             About Me
           </span>
         </motion.div>
@@ -94,7 +102,7 @@ const About = () => {
                       animate={isInView ? { width: `${skill.level}%` } : {}}
                       transition={{ duration: 1, delay: 0.4 + i * 0.1, ease: easeOut }}
                       style={{
-                        background: `linear-gradient(90deg, ${['#4f7cff','#7c5cfc','#ff6b35','#C8883A','#c084fc','#ff4444'][i % 6]}, ${['#7c5cfc','#c084fc','#C8883A','#ff6b35','#4f7cff','#ff6b35'][i % 6]})`,
+                        background: `linear-gradient(90deg, ${['var(--color-accent-blue)','var(--color-accent-purple)','var(--color-accent-warm)','var(--color-accent-purple)','var(--color-accent-blue)','var(--color-accent-warm)'][i % 6]}, ${['var(--color-accent-purple)','var(--color-accent-warm)','var(--color-accent-blue)','var(--color-accent-warm)','var(--color-accent-purple)','var(--color-accent-blue)'][i % 6]})`,
                       }}
                     />
                   </div>
@@ -184,7 +192,7 @@ const About = () => {
               >
                 <div
                   className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ background: bgMap[i % bgMap.length], color: stat.color }}
+                  style={{ background: bgMap[i % bgMap.length], color: getDynamicColor(stat.color) }}
                 >
                   {iconMap[i % iconMap.length]}
                 </div>
@@ -192,7 +200,7 @@ const About = () => {
                   <div className="flex items-baseline gap-1">
                     <span
                       className="text-[28px] font-black leading-none"
-                      style={{ color: stat.color }}
+                      style={{ color: getDynamicColor(stat.color) }}
                     >
                       {stat.value}
                     </span>
@@ -224,14 +232,14 @@ const About = () => {
             >
               <div
                 className="absolute top-0 right-0 w-32 h-32 opacity-10"
-                style={{ background: 'radial-gradient(circle, #4f7cff 0%, transparent 70%)' }}
+                style={{ background: 'radial-gradient(circle, var(--color-accent-blue) 0%, transparent 70%)' }}
               />
               <div className="text-[28px] text-white/30 font-black leading-none mb-3">"</div>
               <p className="text-[14px] text-white/80 leading-[1.7] italic">
                 {about.quote}
               </p>
               <div className="mt-4 flex items-center gap-2">
-                <div className="w-6 h-px bg-[#4f7cff]" />
+                <div className="w-6 h-px bg-[var(--color-accent-blue)]" />
                 <span className="text-[11px] text-white/40 font-medium tracking-wide">
                   {about.nameOverlay}
                 </span>

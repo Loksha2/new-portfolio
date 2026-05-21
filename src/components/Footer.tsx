@@ -28,7 +28,7 @@ const Footer = () => {
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                 <path d="M17.5 2.5L21.5 6.5L8.5 19.5L3 21L4.5 15.5L17.5 2.5Z" fill="white" />
-                <circle cx="4.5" cy="20" r="1.2" fill="#4f7cff" />
+                <circle cx="4.5" cy="20" r="1.2" fill="var(--color-accent-blue)" />
               </svg>
             </div>
           )}
@@ -53,7 +53,7 @@ const Footer = () => {
           transition={{ delay: 0.3 }}
         >
           <span className="text-[11px]" style={{ color: 'var(--text-ghost)' }}>Crafted with</span>
-          <span className="text-[14px] text-[#4f7cff]">✦</span>
+          <span className="text-[14px]" style={{ color: 'var(--color-accent-blue)' }}>✦</span>
           <span className="text-[11px]" style={{ color: 'var(--text-ghost)' }}>design intent</span>
         </motion.div>
       </div>
