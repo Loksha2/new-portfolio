@@ -124,13 +124,13 @@
 
 /* ─── DARK MODE: override every hardcoded bg/color ─────── */
 [data-theme='dark'] .theme-root {
-  background: var(--bg-page) !important;
+  background: transparent !important;
 }
 
 [data-theme='dark'] section,
 [data-theme='dark'] main,
 [data-theme='dark'] footer {
-  background: var(--bg-page) !important;
+  background: transparent !important;
   color: var(--text-primary) !important;
   transition: background 0.35s ease, color 0.35s ease;
 }
@@ -228,7 +228,7 @@
 /* ─── UTILITIES ─────────────────────────────────────────── */
 @layer utilities {
   .theme-root {
-    background: var(--bg-page);
+    background: transparent;
     min-height: 100vh;
     transition: background 0.35s ease;
   }

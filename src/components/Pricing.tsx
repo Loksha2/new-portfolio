@@ -158,7 +158,7 @@ const PricingCard = ({ tier, index }: { tier: PricingTier; index: number }) => {
 
 export default function Pricing() {
   return (
-    <section id="pricing" className="py-24 relative overflow-hidden">
+    <section id="pricing" className="py-24 relative overflow-hidden" style={{ background: 'transparent' }}>
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl font-black mb-5" style={{ color: 'var(--text-primary)' }}>

@@ -166,7 +166,7 @@ export default function Projects() {
   const filtered = activeFilter === 'all' ? allProjects : allProjects.filter(p => p.category === activeFilter);
 
   return (
-    <section id="projects" className="py-24 relative overflow-hidden" ref={ref}>
+    <section id="projects" className="py-24 relative overflow-hidden" ref={ref} style={{ background: 'transparent' }}>
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-black mb-4" style={{ color: 'var(--text-primary)' }}>Selected <span className="text-gradient">Projects</span></h2>
