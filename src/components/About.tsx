@@ -41,7 +41,7 @@ const About = () => {
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-start">
-          {/* Left — text */}
+          {/* Left — text + skills */}
           <div>
             <motion.h2
               initial={{ opacity: 0, y: 30 }}
@@ -104,16 +104,15 @@ const About = () => {
             </motion.div>
           </div>
 
-          {/* Right — portrait + stats */}
-          <div className="flex flex-col gap-5">
-            {/* Portrait card */}
+          {/* Right — portrait image (tall) */}
+          <div>
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.1, ease: easeOut }}
               className="rounded-2xl overflow-hidden relative"
               style={{
-                height: '420px',
+                height: '520px',
                 background: 'linear-gradient(145deg, var(--bg-card) 0%, var(--bg-card-end) 100%)',
                 border: '1px solid var(--border-subtle)',
                 boxShadow: '0 8px 30px rgba(0,0,0,0.12)',
@@ -133,14 +132,19 @@ const About = () => {
                 <div className="text-white/60 text-[12px] mt-0.5">{about.locationOverlay}</div>
               </div>
             </motion.div>
+          </div>
+        </div>
 
-            {/* Stat cards */}
+        {/* ── Row 2: Stats (left) + Quote (right) ── */}
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 mt-8">
+          {/* Left — stat cards */}
+          <div className="flex flex-col gap-4">
             {about.stats.map((stat, i) => (
               <motion.div
                 key={stat.label}
-                initial={{ opacity: 0, x: 30 }}
-                animate={isInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.15 + i * 0.12, ease: easeOut }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: 0.5 + i * 0.12, ease: easeOut }}
                 className="flex items-center gap-5 p-5 rounded-2xl"
                 style={{
                   background: 'linear-gradient(145deg, var(--bg-card) 0%, var(--bg-card-end) 100%)',
@@ -175,12 +179,14 @@ const About = () => {
                 </div>
               </motion.div>
             ))}
+          </div>
 
-            {/* Quote card */}
+          {/* Right — quote card */}
+          <div className="flex flex-col justify-end">
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.55, ease: easeOut }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.6, ease: easeOut }}
               className="p-6 rounded-2xl relative overflow-hidden"
               style={{
                 background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
