@@ -2,7 +2,7 @@ import { motion, useInView } from 'framer-motion';
 import { ArrowRight, Sparkles, ArrowDown } from 'lucide-react';
 import { useRef, useEffect, useState } from 'react';
 import { useSiteSettings } from './SiteSettingsContext';
-import DesignMascot from './DesignMascot';
+import CreativeWorkspace from './CreativeWorkspace';
 import BlurText from './BlurText';
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
@@ -215,8 +215,8 @@ const Hero = () => {
             transition={{ duration: 0.9, delay: 0.25, ease: easeOut }}
             className="hidden lg:flex flex-col items-center justify-center gap-6 relative"
           >
-            {/* Mascot */}
-            <DesignMascot />
+            {/* Creative Workspace Artboard */}
+            <CreativeWorkspace />
 
             {/* Mini floating info cards around mascot */}
             <div className="absolute -left-8 top-[15%]">
