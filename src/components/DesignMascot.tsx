@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { motion, AnimatePresence, useSpring, useMotionValue } from 'framer-motion';
+import { motion, AnimatePresence, useSpring } from 'framer-motion';
 
 const TIPS = [
   "Great design is invisible.",
@@ -25,8 +25,6 @@ export const DesignMascot = () => {
   const [hasGreeted, setHasGreeted] = useState(false);
 
   // Eye tracking
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
   const eyeOffsetX = useSpring(0, { stiffness: 120, damping: 18 });
   const eyeOffsetY = useSpring(0, { stiffness: 120, damping: 18 });
 

@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { 
-  Plus, Trash2, Pencil, LogOut, Folder, 
+  Plus, Trash2, Pencil, LogOut, 
   Layers, Image as ImageIcon, LayoutDashboard, 
-  Upload, X, Tag, FileText, Lock, Eye, Loader2, CheckCircle2
+  X, Lock, Eye, Loader2, CheckCircle2
 } from 'lucide-react';
 import { supabase } from '../supabaseClient'; // الربط مع الكلاينت الجديد
 
@@ -67,7 +67,6 @@ export default function AdminDashboard() {
   const [isPreviewUploading, setIsPreviewUploading] = useState(false);
   const [previewSuccess, setPreviewSuccess] = useState(false);
   const [isGalleryUploading, setIsGalleryUploading] = useState(false);
-  const [gallerySuccess, setGallerySuccess] = useState(false);
 
   const previewInputRef = useRef<HTMLInputElement>(null);
   const additionalInputRef = useRef<HTMLInputElement>(null);
@@ -119,7 +118,6 @@ export default function AdminDashboard() {
     setPreviewImage('');
     setAdditionalImages([]);
     setPreviewSuccess(false);
-    setGallerySuccess(false);
     setShowModal(true);
   };
 
@@ -133,7 +131,6 @@ export default function AdminDashboard() {
     setPreviewImage(project.previewImage || '');
     setAdditionalImages(project.additionalImages || []);
     setPreviewSuccess(false);
-    setGallerySuccess(false);
     setShowModal(true);
   };
 
@@ -189,7 +186,6 @@ export default function AdminDashboard() {
     if (files.length === 0) return;
 
     setIsGalleryUploading(true);
-    setGallerySuccess(false);
 
     const uploadedUrls: string[] = [];
     for (const file of files) {
@@ -199,7 +195,6 @@ export default function AdminDashboard() {
 
     if (uploadedUrls.length > 0) {
       setAdditionalImages(prev => [...prev, ...uploadedUrls]);
-      setGallerySuccess(true);
     }
     setIsGalleryUploading(false);
   };

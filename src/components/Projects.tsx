@@ -1,9 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, ExternalLink, X, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
+import { ExternalLink, X, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import { supabase } from '../supabaseClient'; // جلب كلاينت السيرفر
 
-const easeOut = [0.22, 1, 0.36, 1] as const;
 type Category = 'brand' | 'social';
 
 interface Project {

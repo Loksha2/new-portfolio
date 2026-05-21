@@ -1,7 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 
-// املأ البيانات دي من إعدادات مشروعك في Supabase (Project Settings -> API)
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "https://your-supabase-url.supabase.co";
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || "your-anon-key";
+const supabaseUrl = "https://wbigjhzgurqxqzmazbhy.supabase.co";
+const supabaseAnonKey = "sb_publishable_gyF_p7I8ksWzqgu0uyvbhw_Zh7RKV69";
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
