@@ -40,7 +40,7 @@ const About = () => {
           </span>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-start">
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-stretch">
           {/* Left — text + skills */}
           <div>
             <motion.h2
@@ -104,15 +104,15 @@ const About = () => {
             </motion.div>
           </div>
 
-          {/* Right — portrait image (tall) */}
-          <div>
+          {/* Right — portrait image (tall, fills full height) */}
+          <div className="h-full">
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.1, ease: easeOut }}
-              className="rounded-2xl overflow-hidden relative"
+              className="rounded-2xl overflow-hidden relative h-full"
               style={{
-                height: '520px',
+                minHeight: '520px',
                 background: 'linear-gradient(145deg, var(--bg-card) 0%, var(--bg-card-end) 100%)',
                 border: '1px solid var(--border-subtle)',
                 boxShadow: '0 8px 30px rgba(0,0,0,0.12)',
