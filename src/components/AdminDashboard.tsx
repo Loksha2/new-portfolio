@@ -1226,6 +1226,8 @@ function InstagramEditor() {
   const [saved, setSaved] = useState(false);
 
   const [profileImage, setProfileImage] = useState('');
+  const [username, setUsername] = useState('');
+  const [profileName, setProfileName] = useState('');
   const [bioTitle, setBioTitle] = useState('');
   const [bioDescription, setBioDescription] = useState('');
   const [followersCount, setFollowersCount] = useState('');
@@ -1236,6 +1238,8 @@ function InstagramEditor() {
     const inst = settings.instagram;
     if (inst) {
       setProfileImage(inst.profileImage || '');
+      setUsername(inst.username || '');
+      setProfileName(inst.profileName || '');
       setBioTitle(inst.bioTitle || '');
       setBioDescription(inst.bioDescription || '');
       setFollowersCount(inst.followersCount || '');
@@ -1248,7 +1252,7 @@ function InstagramEditor() {
     setSaving(true);
     setSaved(false);
     try {
-      await updateSection('instagram', { profileImage, bioTitle, bioDescription, followersCount, followingCount, highlights });
+      await updateSection('instagram', { profileImage, username, profileName, bioTitle, bioDescription, followersCount, followingCount, highlights });
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
     } catch {
@@ -1272,6 +1276,16 @@ function InstagramEditor() {
         <div style={cardStyle}>
           <div style={{ marginBottom: '16px' }}>
             <ImageUploadButton label="صورة البروفايل (Profile Picture)" value={profileImage} onChange={setProfileImage} />
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+            <div>
+              <label style={labelStyle}>اسم المستخدم (Username - بالإنجليزية)</label>
+              <input style={inputStyle} value={username} onChange={e => setUsername(e.target.value)} placeholder="مثال: mohamedashraf_26" />
+            </div>
+            <div>
+              <label style={labelStyle}>اسم الحساب (Profile Name)</label>
+              <input style={inputStyle} value={profileName} onChange={e => setProfileName(e.target.value)} placeholder="مثال: Mohamad Ashraf" />
+            </div>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
             <div>

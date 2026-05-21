@@ -109,6 +109,8 @@ export interface InstagramHighlight {
 
 export interface InstagramSettings {
   profileImage?: string;
+  username?: string;
+  profileName?: string;
   bioTitle: string;
   bioDescription: string;
   followersCount: string;
@@ -328,6 +330,8 @@ const defaultContact: ContactSettings = {
 
 const defaultInstagram: InstagramSettings = {
   profileImage: "",
+  username: "mohamedashraf_26",
+  profileName: "Mohamad Ashraf",
   bioTitle: "Graphic Designer | Brand Identity & Social Media 🎨",
   bioDescription: "Designs that capture attention and leave a unique footprint. Let's work together! 🔥",
   followersCount: "12.5K",
