@@ -1,7 +1,7 @@
 import { motion, useInView } from 'framer-motion';
 import { ArrowRight, Sparkles, ArrowDown } from 'lucide-react';
 import { useRef, useEffect, useState } from 'react';
-import DesignMascot from './DesignMascot';
+import { useSiteSettings } from './SiteSettingsContext';
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
@@ -81,8 +81,83 @@ const FloatingElements = () => (
   </div>
 );
 
+// ─── PORTRAIT IMAGE PLACEHOLDER ──────────────────────────────────────────────
+const ProfilePortrait = ({ profileImage, name }: { profileImage?: string; name: string }) => {
+  const initials = name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+  const hasImage = profileImage && profileImage.trim() !== '';
+
+  return (
+    <div className="relative w-full flex justify-center">
+      {/* Glow behind portrait */}
+      <div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] h-[380px] rounded-[32px] blur-[60px] opacity-30"
+        style={{ background: 'linear-gradient(135deg, #4f7cff, #7c5cfc)' }}
+      />
+
+      {/* Portrait container */}
+      <motion.div
+        className="relative rounded-[28px] overflow-hidden"
+        style={{
+          width: '280px',
+          height: '380px',
+          border: '2px solid rgba(255,255,255,0.08)',
+          boxShadow: '0 25px 80px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.05)',
+        }}
+        initial={{ opacity: 0, y: 40, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.9, delay: 0.3, ease: easeOut }}
+      >
+        {hasImage ? (
+          <img
+            src={profileImage}
+            alt={name}
+            className="w-full h-full object-cover object-top"
+          />
+        ) : (
+          /* Gradient placeholder with initials */
+          <div
+            className="w-full h-full flex items-center justify-center"
+            style={{
+              background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 35%, #0f3460 60%, #4f7cff 100%)',
+            }}
+          >
+            <span className="text-[64px] font-black text-white/20">{initials}</span>
+          </div>
+        )}
+
+        {/* Bottom gradient overlay */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-32"
+          style={{ background: 'linear-gradient(0deg, rgba(0,0,0,0.7) 0%, transparent 100%)' }}
+        />
+
+        {/* Name overlay */}
+        <div className="absolute bottom-4 left-5 right-5">
+          <div className="text-white font-bold text-[15px] tracking-tight">{name}</div>
+          <div className="text-white/50 text-[11px] font-medium">Graphic Designer</div>
+        </div>
+
+        {/* Top-right decorative badge */}
+        <div
+          className="absolute top-4 right-4 px-2.5 py-1 rounded-full text-[9px] font-bold tracking-wider uppercase"
+          style={{
+            background: 'rgba(79,124,255,0.2)',
+            color: '#4f7cff',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(79,124,255,0.3)',
+          }}
+        >
+          ✦ Designer
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
 // ─── HERO ────────────────────────────────────────────────────────────────────
 const Hero = () => {
+  const { settings } = useSiteSettings();
+  const hero = settings.hero;
   const handleScroll = (href: string) => {
     const el = document.querySelector(href);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -97,7 +172,7 @@ const Hero = () => {
       <FloatingElements />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 pt-28 pb-20 w-full">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-6 items-center">
+        <div className="grid lg:grid-cols-[1fr,auto] gap-12 lg:gap-16 items-center">
 
           {/* ── LEFT COLUMN ── */}
           <div className="flex flex-col">
@@ -115,7 +190,7 @@ const Hero = () => {
             >
               <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
               <span className="text-[12px] font-semibold tracking-wide" style={{ color: 'var(--text-secondary)' }}>
-                Available for new projects
+                {hero.availabilityText}
               </span>
             </motion.div>
 
@@ -129,17 +204,7 @@ const Hero = () => {
                 color: 'var(--text-primary)',
               }}
             >
-              Designing{' '}
-              <span className="text-gradient">visual</span>
-              <br />
-              identities that{' '}
-              <br />
-              <span
-                className="italic"
-                style={{ fontFamily: 'Georgia, serif' }}
-              >
-                brands love.
-              </span>
+              {hero.headline}
             </motion.h1>
 
             {/* Sub */}
@@ -151,11 +216,9 @@ const Hero = () => {
             >
               I'm{' '}
               <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>
-                Mohamad Ashraf
+                {hero.name}
               </span>
-              , a graphic designer specializing in brand identity systems and
-              scroll-stopping social media posters for Facebook, Instagram, and
-              digital campaigns.
+              , {hero.description}
             </motion.p>
 
             {/* CTAs */}
@@ -169,7 +232,7 @@ const Hero = () => {
                 className="btn-primary flex items-center gap-2 group"
                 whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
               >
-                View My Work
+                {hero.ctaPrimary}
                 <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
               </motion.button>
               <motion.button
@@ -178,7 +241,7 @@ const Hero = () => {
                 whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
               >
                 <Sparkles size={14} />
-                See Pricing
+                {hero.ctaSecondary}
               </motion.button>
             </motion.div>
 
@@ -188,40 +251,44 @@ const Hero = () => {
               transition={{ duration: 0.7, delay: 0.46, ease: easeOut }}
               className="flex flex-wrap gap-8"
             >
-              {[
-                { value: 1,    suffix: '+', label: 'Year Experience',    color: '#4f7cff' },
-                { value: 30,   suffix: '+', label: 'Projects Delivered', color: '#7c5cfc' },
-                { value: 100,  suffix: '%', label: 'Client Satisfaction', color: '#ff6b35' },
-              ].map((stat) => (
-                <div key={stat.label} className="flex flex-col">
-                  <span
-                    className="text-[32px] font-black leading-none"
-                    style={{ color: stat.color }}
-                  >
-                    <AnimatedCounter target={stat.value} suffix={stat.suffix} />
-                  </span>
-                  <span
-                    className="text-[12px] font-medium mt-1.5 tracking-wide"
-                    style={{ color: 'var(--text-faint)' }}
-                  >
-                    {stat.label}
-                  </span>
-                </div>
-              ))}
+              {hero.stats.map((stat) => {
+                const numMatch = stat.value.match(/^(\d+)(.*)$/);
+                const numericVal = numMatch ? parseInt(numMatch[1]) : stat.value;
+                const suffix = numMatch ? numMatch[2] : '';
+                return (
+                  <div key={stat.label} className="flex flex-col">
+                    <span
+                      className="text-[32px] font-black leading-none"
+                      style={{ color: stat.color }}
+                    >
+                      {typeof numericVal === 'number' ? (
+                        <AnimatedCounter target={numericVal} suffix={suffix} />
+                      ) : (
+                        <>{stat.value}</>
+                      )}
+                    </span>
+                    <span
+                      className="text-[12px] font-medium mt-1.5 tracking-wide"
+                      style={{ color: 'var(--text-faint)' }}
+                    >
+                      {stat.label}
+                    </span>
+                  </div>
+                );
+              })}
             </motion.div>
           </div>
 
-          {/* ── RIGHT COLUMN — Mascot + floating cards ── */}
+          {/* ── RIGHT COLUMN — Portrait Profile Image ── */}
           <motion.div
             initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.9, delay: 0.25, ease: easeOut }}
-            className="hidden lg:flex flex-col items-center justify-center gap-6 relative"
+            className="hidden lg:flex flex-col items-center justify-center relative"
           >
-            {/* Mascot */}
-            <DesignMascot />
+            <ProfilePortrait profileImage={hero.profileImage} name={hero.name} />
 
-            {/* Mini floating info cards around mascot */}
-            <div className="absolute -left-8 top-[15%]">
+            {/* Mini floating info cards around portrait */}
+            <div className="absolute -left-12 top-[10%]">
               <motion.div
                 className="rounded-2xl p-3.5 flex items-center gap-3 min-w-[160px]"
                 style={{
@@ -246,7 +313,7 @@ const Hero = () => {
               </motion.div>
             </div>
 
-            <div className="absolute -right-6 top-[20%]">
+            <div className="absolute -right-10 top-[25%]">
               <motion.div
                 className="rounded-2xl p-3.5 flex items-center gap-3 min-w-[150px]"
                 style={{
@@ -265,7 +332,7 @@ const Hero = () => {
               </motion.div>
             </div>
 
-            <div className="absolute -left-4 bottom-[18%]">
+            <div className="absolute -left-8 bottom-[12%]">
               <motion.div
                 className="rounded-2xl px-4 py-3"
                 style={{

@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSiteSettings } from './SiteSettingsContext';
 
 const SplashScreen = ({ onDone }: { onDone: () => void }) => {
   const [phase, setPhase] = useState<'in' | 'hold' | 'out'>('in');
+  const { settings } = useSiteSettings();
 
   useEffect(() => {
     // Check if already shown in this session
@@ -57,13 +59,13 @@ const SplashScreen = ({ onDone }: { onDone: () => void }) => {
               transition={{ delay: 0.3, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             >
               <span className="text-white font-black text-[22px] tracking-tight">
-                Mohamad Ashraf
+                {settings.general.name}
               </span>
               <span
                 className="text-[13px] font-medium tracking-[0.2em] uppercase"
                 style={{ color: 'rgba(255,255,255,0.35)' }}
               >
-                Graphic Designer
+                {settings.general.title}
               </span>
             </motion.div>
 

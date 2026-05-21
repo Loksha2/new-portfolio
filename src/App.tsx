@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ThemeProvider } from './components/ThemeContext';
+import { SiteSettingsProvider } from './components/SiteSettingsContext';
 import SplashScreen from './components/SplashScreen';
 import ScrollProgress from './components/ScrollProgress';
 import CustomCursor from './components/CustomCursor';
@@ -30,35 +31,41 @@ function App() {
   }, []);
 
   if (currentHash === '#admin') {
-    return <AdminDashboard />;
+    return (
+      <SiteSettingsProvider>
+        <AdminDashboard />
+      </SiteSettingsProvider>
+    );
   }
 
   return (
-    <ThemeProvider>
-      <ParticleBackground />
-      <SplashScreen onDone={handleSplashDone} />
-      <div
-        className="relative min-h-screen theme-root"
-        style={{ opacity: splashDone ? 1 : 0, transition: 'opacity 0.4s ease', position: 'relative', zIndex: 1 }}
-      >
-        <ScrollProgress />
-        <CustomCursor />
-        <Navbar />
-        <main>
-          <Hero />
-          <Marquee />
-          <About />
-          <Services />
-          <Projects />
-          <Process />
-          <Pricing />
-          <FAQ />
-          <Contact />
-        </main>
-        <Footer />
-        <BackToTop />
-      </div>
-    </ThemeProvider>
+    <SiteSettingsProvider>
+      <ThemeProvider>
+        <ParticleBackground />
+        <SplashScreen onDone={handleSplashDone} />
+        <div
+          className="relative min-h-screen theme-root"
+          style={{ opacity: splashDone ? 1 : 0, transition: 'opacity 0.4s ease', position: 'relative', zIndex: 1 }}
+        >
+          <ScrollProgress />
+          <CustomCursor />
+          <Navbar />
+          <main>
+            <Hero />
+            <Marquee />
+            <About />
+            <Services />
+            <Projects />
+            <Process />
+            <Pricing />
+            <FAQ />
+            <Contact />
+          </main>
+          <Footer />
+          <BackToTop />
+        </div>
+      </ThemeProvider>
+    </SiteSettingsProvider>
   );
 }
 

@@ -3,8 +3,8 @@ import { motion, useInView } from 'framer-motion';
 import { MessageCircle, ExternalLink, Mail } from 'lucide-react';
 import { SiBehance } from 'react-icons/si';
 import { FaWhatsapp, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
+import { useSiteSettings } from './SiteSettingsContext';
 
-const EMAIL_ADDRESS = "mohamedloksha2@gmail.com";
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
 interface SocialLink {
@@ -12,12 +12,12 @@ interface SocialLink {
   color: string; glow: string; bg: string;
 }
 
-const socialLinks: SocialLink[] = [
-  { label: 'Behance',   href: 'https://behance.net/mohamedashraf5055',    icon: <SiBehance size={20} />,    color: '#1769ff', glow: 'rgba(23,105,255,0.35)',  bg: 'rgba(23,105,255,0.08)'  },
-  { label: 'WhatsApp',  href: 'https://wa.me/201202638313',               icon: <FaWhatsapp size={20} />,   color: '#25d366', glow: 'rgba(37,211,102,0.35)', bg: 'rgba(37,211,102,0.08)' },
-  { label: 'Instagram', href: 'https://instagram.com/mohamedashraf_26/',  icon: <FaInstagram size={20} />,  color: '#e1306c', glow: 'rgba(225,48,108,0.35)', bg: 'rgba(225,48,108,0.08)' },
-  { label: 'LinkedIn',  href: 'https://linkedin.com/in/mo7amed-ashraf/', icon: <FaLinkedinIn size={20} />, color: '#0a66c2', glow: 'rgba(10,102,194,0.35)',  bg: 'rgba(10,102,194,0.08)'  },
-  { label: 'Gmail',     href: `mailto:${EMAIL_ADDRESS}`,                  icon: <Mail size={20} />,         color: '#ea4335', glow: 'rgba(234,67,53,0.35)',  bg: 'rgba(234,67,53,0.08)'  },
+const buildSocialLinks = (contactSettings: any): SocialLink[] => [
+  { label: 'Behance',   href: contactSettings.socialLinks.behance,    icon: <SiBehance size={20} />,    color: '#1769ff', glow: 'rgba(23,105,255,0.35)',  bg: 'rgba(23,105,255,0.08)'  },
+  { label: 'WhatsApp',  href: contactSettings.socialLinks.whatsapp,   icon: <FaWhatsapp size={20} />,   color: '#25d366', glow: 'rgba(37,211,102,0.35)', bg: 'rgba(37,211,102,0.08)' },
+  { label: 'Instagram', href: contactSettings.socialLinks.instagram,  icon: <FaInstagram size={20} />,  color: '#e1306c', glow: 'rgba(225,48,108,0.35)', bg: 'rgba(225,48,108,0.08)' },
+  { label: 'LinkedIn',  href: contactSettings.socialLinks.linkedin,   icon: <FaLinkedinIn size={20} />, color: '#0a66c2', glow: 'rgba(10,102,194,0.35)',  bg: 'rgba(10,102,194,0.08)'  },
+  { label: 'Gmail',     href: `mailto:${contactSettings.email}`,      icon: <Mail size={20} />,         color: '#ea4335', glow: 'rgba(234,67,53,0.35)',  bg: 'rgba(234,67,53,0.08)'  },
 ];
 
 const SocialIcon = ({ link }: { link: SocialLink }) => (
@@ -43,6 +43,9 @@ const SocialIcon = ({ link }: { link: SocialLink }) => (
 const Contact = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-80px' });
+  const { settings } = useSiteSettings();
+  const contact = settings.contact;
+  const socialLinks = buildSocialLinks(contact);
 
   return (
     <section id="contact" className="section-padding relative overflow-hidden" style={{ background: 'transparent' }}>
@@ -71,30 +74,29 @@ const Contact = () => {
 
             <motion.h2 initial={{ opacity: 0, y: 25 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7, delay: 0.2, ease: easeOut }}
               className="text-[32px] sm:text-[42px] md:text-[50px] font-black text-white leading-[1.1] tracking-tight mb-5">
-              Let's create a visual identity{' '}
-              <span className="text-gradient-cool">your audience</span>{' '}remembers.
+              {contact.heading}
             </motion.h2>
 
             <motion.p initial={{ opacity: 0, y: 20 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6, delay: 0.3, ease: easeOut }}
               className="text-[15px] text-white/50 max-w-[480px] mx-auto leading-relaxed mb-10">
-              Available for brand identity projects, social media poster designs, and creative visual direction.
+              {contact.description}
             </motion.p>
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6, delay: 0.4, ease: easeOut }}
               className="flex flex-wrap gap-3 justify-center mb-12">
-              <motion.a href="https://wa.me/201202638313" target="_blank" rel="noopener noreferrer"
+              <motion.a href={contact.socialLinks.whatsapp} target="_blank" rel="noopener noreferrer"
                 className="flex items-center gap-2.5 px-6 py-3.5 rounded-full font-semibold text-[14px] text-white"
                 style={{ background: 'linear-gradient(135deg, #25d366, #1da851)', boxShadow: '0 4px 20px rgba(37,211,102,0.35)' }}
                 whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} data-cursor-hover>
                 <MessageCircle size={17} /> WhatsApp Me
               </motion.a>
-              <motion.a href={`mailto:${EMAIL_ADDRESS}`}
+              <motion.a href={`mailto:${contact.email}`}
                 className="flex items-center gap-2.5 px-6 py-3.5 rounded-full font-semibold text-[14px] text-white"
                 style={{ background: 'linear-gradient(135deg, #ea4335, #d33828)', boxShadow: '0 4px 20px rgba(234,67,53,0.35)' }}
                 whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} data-cursor-hover>
                 <Mail size={17} /> Email Me
               </motion.a>
-              <motion.a href="https://behance.net/mohamedashraf5055" target="_blank" rel="noopener noreferrer"
+              <motion.a href={contact.socialLinks.behance} target="_blank" rel="noopener noreferrer"
                 className="flex items-center gap-2.5 px-6 py-3.5 rounded-full font-semibold text-[14px]"
                 style={{ background: 'rgba(255,255,255,0.07)', border: '1.5px solid rgba(255,255,255,0.15)', color: 'white', backdropFilter: 'blur(10px)' }}
                 whileHover={{ background: 'rgba(255,255,255,0.12)', scale: 1.05 }} whileTap={{ scale: 0.97 }} data-cursor-hover>
@@ -113,14 +115,15 @@ const Contact = () => {
 
         <motion.div initial={{ opacity: 0, y: 15 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6, delay: 0.7, ease: easeOut }}
           className="flex flex-wrap items-center justify-center gap-6 mt-10">
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-            <span className="text-[13px] font-medium" style={{ color: 'var(--text-muted)' }}>Available for new projects</span>
-          </div>
-          <div className="w-1 h-1 rounded-full" style={{ background: 'var(--border-subtle)' }} />
-          <span className="text-[13px]" style={{ color: 'var(--text-muted)' }}>Response within 24 hours</span>
-          <div className="w-1 h-1 rounded-full" style={{ background: 'var(--border-subtle)' }} />
-          <span className="text-[13px]" style={{ color: 'var(--text-muted)' }}>Based in Egypt 🇪🇬</span>
+          {contact.statusItems.map((item, i) => (
+            <span key={i} className="flex items-center gap-2">
+              {i === 0 && <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />}
+              <span className="text-[13px] font-medium" style={{ color: 'var(--text-muted)' }}>{item}</span>
+              {i < contact.statusItems.length - 1 && (
+                <div className="w-1 h-1 rounded-full ml-4" style={{ background: 'var(--border-subtle)' }} />
+              )}
+            </span>
+          ))}
         </motion.div>
       </div>
     </section>

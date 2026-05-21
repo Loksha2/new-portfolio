@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import { useTheme } from './ThemeContext';
+import { useSiteSettings } from './SiteSettingsContext';
 
 const navLinks = [
   { label: 'Home', href: '#home' },
@@ -19,6 +20,9 @@ const Navbar = () => {
   const [spinning, setSpinning] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const isDark = theme === 'dark';
+  const { settings } = useSiteSettings();
+  const logoImage = settings.general.logoImage;
+  const siteName = settings.general.name;
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -63,24 +67,28 @@ const Navbar = () => {
             className="flex items-center gap-2 group"
             whileHover={{ scale: 1.02 }}
           >
-            <div
-              className="w-8 h-8 rounded-lg flex items-center justify-center"
-              style={{ background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)' }}
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M17.5 2.5L21.5 6.5L8.5 19.5L3 21L4.5 15.5L17.5 2.5Z"
-                  fill="white"
-                  strokeWidth="0"
-                />
-                <circle cx="4.5" cy="20" r="1.2" fill="#4f7cff" />
-              </svg>
-            </div>
+            {logoImage ? (
+              <img src={logoImage} alt={siteName} className="w-8 h-8 rounded-lg object-cover" />
+            ) : (
+              <div
+                className="w-8 h-8 rounded-lg flex items-center justify-center"
+                style={{ background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)' }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M17.5 2.5L21.5 6.5L8.5 19.5L3 21L4.5 15.5L17.5 2.5Z"
+                    fill="white"
+                    strokeWidth="0"
+                  />
+                  <circle cx="4.5" cy="20" r="1.2" fill="#4f7cff" />
+                </svg>
+              </div>
+            )}
             <span
               className="font-bold text-[15px] tracking-tight"
               style={{ color: 'var(--text-primary)' }}
             >
-              Mohamad Ashraf
+              {siteName}
             </span>
           </motion.a>
 
