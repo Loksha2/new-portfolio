@@ -226,7 +226,8 @@ export default function AdminDashboard() {
         fetchProjects();
         setShowModal(false);
       } else {
-        alert('حدث خطأ أثناء تحديث البيانات السحابية!');
+        console.error("Update error:", error);
+        alert('حدث خطأ أثناء تحديث البيانات السحابية: ' + error.message);
       }
     } else {
       const colorIdx = projects.length % USER_ACCENT_COLORS[category].length;
@@ -253,7 +254,8 @@ export default function AdminDashboard() {
         fetchProjects();
         setShowModal(false);
       } else {
-        alert('حدث خطأ أثناء إضافة البيانات السحابية لقاعدة البيانات!');
+        console.error("Insert error:", error);
+        alert('حدث خطأ أثناء إضافة البيانات السحابية لقاعدة البيانات: ' + error.message);
       }
     }
   };
