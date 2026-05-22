@@ -52,9 +52,6 @@ const Footer = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
-          <span className="text-[11px]" style={{ color: 'var(--text-ghost)' }}>Crafted with</span>
-          <span className="text-[14px]" style={{ color: 'var(--color-accent-blue)' }}>✦</span>
-          <span className="text-[11px]" style={{ color: 'var(--text-ghost)' }}>design intent</span>
         </motion.div>
       </div>
     </footer>
