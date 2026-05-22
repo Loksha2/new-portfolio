@@ -91,6 +91,24 @@ const BlurText: React.FC<BlurTextProps> = ({
       style={style}
     >
       {words.map((word, wordIdx) => {
+        let wordText = word;
+        let isItalicSerif = false;
+        let isGradient = false;
+        let suffix = '';
+
+        const italicMatch = word.match(/^\*(.+)\*([.,\/#!$%\^&\*;:{}=\-_`~()]*)$/);
+        const gradientMatch = word.match(/^\[(.+)\]([.,\/#!$%\^&\*;:{}=\-_`~()]*)$/);
+
+        if (italicMatch) {
+          isItalicSerif = true;
+          wordText = italicMatch[1];
+          suffix = italicMatch[2];
+        } else if (gradientMatch) {
+          isGradient = true;
+          wordText = gradientMatch[1];
+          suffix = gradientMatch[2];
+        }
+
         if (animateBy === 'words') {
           return (
             <motion.span
@@ -99,31 +117,51 @@ const BlurText: React.FC<BlurTextProps> = ({
               custom={wordIdx}
               className="inline-block me-[0.25em]"
             >
-              {word}
+              <span
+                className={isGradient ? "text-gradient" : ""}
+                style={
+                  isItalicSerif
+                    ? { fontFamily: "'Playfair Display', serif", fontStyle: 'italic', fontWeight: 900, textTransform: 'none' }
+                    : undefined
+                }
+              >
+                {wordText}
+              </span>
+              {suffix}
             </motion.span>
           );
         } else {
-          const chars = Array.from(word);
+          const chars = Array.from(wordText);
           return (
             <span key={wordIdx} className="inline-block me-[0.25em] whitespace-nowrap">
-              {chars.map((char, charIdx) => {
-                let globalCharIndex = 0;
-                for (let i = 0; i < wordIdx; i++) {
-                  globalCharIndex += words[i].length;
+              <span
+                className={isGradient ? "text-gradient" : ""}
+                style={
+                  isItalicSerif
+                    ? { fontFamily: "'Playfair Display', serif", fontStyle: 'italic', fontWeight: 900, textTransform: 'none' }
+                    : undefined
                 }
-                globalCharIndex += charIdx;
+              >
+                {chars.map((char, charIdx) => {
+                  let globalCharIndex = 0;
+                  for (let i = 0; i < wordIdx; i++) {
+                    globalCharIndex += words[i].length;
+                  }
+                  globalCharIndex += charIdx;
 
-                return (
-                  <motion.span
-                    key={charIdx}
-                    variants={childVariants}
-                    custom={globalCharIndex}
-                    style={{ display: 'inline-block' }}
-                  >
-                    {char}
-                  </motion.span>
-                );
-              })}
+                  return (
+                    <motion.span
+                      key={charIdx}
+                      variants={childVariants}
+                      custom={globalCharIndex}
+                      style={{ display: 'inline-block' }}
+                    >
+                      {char}
+                    </motion.span>
+                  );
+                })}
+              </span>
+              {suffix}
             </span>
           );
         }

@@ -156,7 +156,7 @@ const defaultGeneral: GeneralSettings = {
 
 const defaultHero: HeroSettings = {
   availabilityText: "Available for new projects",
-  headline: "Designing visual identities that brands love.",
+  headline: "Designing visual [identities] that make brands *impossible* to ignore.",
   name: "Mohamad Ashraf",
   description:
     "a graphic designer specializing in brand identity systems and scroll-stopping social media posters for Facebook, Instagram, and digital campaigns.",
