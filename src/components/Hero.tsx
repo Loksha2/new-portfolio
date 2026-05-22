@@ -4,6 +4,7 @@ import { useRef, useEffect, useState } from 'react';
 import { useSiteSettings } from './SiteSettingsContext';
 import DesignMascot from './DesignMascot';
 import BlurText from './BlurText';
+import { smoothScrollTo } from '../utils/scroll';
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
@@ -55,31 +56,7 @@ const FloatingElements = () => (
         backgroundSize: '38px 38px',
       }} />
 
-    {/* Floating accent pills */}
-    {[
-      { label: 'Logo Design ✦',     top: '12%', left: '6%',  delay: 0,   color: 'var(--color-accent-blue)' },
-      { label: 'Brand Identity ✦',  top: '70%', left: '3%',  delay: 1.2, color: 'var(--color-accent-purple)' },
-      { label: 'Social Media ✦',    top: '18%', right: '4%', delay: 0.6, color: 'var(--color-accent-warm)' },
-      { label: 'Typography ✦',      top: '75%', right: '5%', delay: 1.8, color: 'var(--color-accent-purple)' },
-    ].map((item) => (
-      <motion.div
-        key={item.label}
-        className="absolute hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-bold tracking-wide uppercase"
-        style={{
-          top: item.top,
-          left: (item as any).left,
-          right: (item as any).right,
-          background: `color-mix(in oklab, ${item.color} 8%, transparent)`,
-          border: `1px solid color-mix(in oklab, ${item.color} 20%, transparent)`,
-          color: item.color,
-          backdropFilter: 'blur(8px)',
-        }}
-        animate={{ y: [0, -10, 0] }}
-        transition={{ duration: 4 + (item as any).delay, repeat: Infinity, ease: 'easeInOut', delay: item.delay }}
-      >
-        {item.label}
-      </motion.div>
-    ))}
+    {/* Floating accent pills removed */}
   </div>
 );
 
@@ -96,8 +73,7 @@ const Hero = ({ isVisible = true }: { isVisible?: boolean }) => {
   const { settings } = useSiteSettings();
   const hero = settings.hero;
   const handleScroll = (href: string) => {
-    const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    smoothScrollTo(href);
   };
 
   return (
@@ -231,66 +207,6 @@ const Hero = ({ isVisible = true }: { isVisible?: boolean }) => {
           >
             {/* Mascot */}
             <DesignMascot />
-
-            {/* Mini floating info cards around mascot */}
-            <div className="absolute -left-8 top-[15%]">
-              <motion.div
-                className="rounded-2xl p-3.5 flex items-center gap-3 min-w-[160px]"
-                style={{
-                  background: 'linear-gradient(145deg, var(--bg-card) 0%, var(--bg-card-end) 100%)',
-                  border: '1px solid var(--border-subtle)',
-                  boxShadow: '0 8px 30px rgba(0,0,0,0.08)',
-                }}
-                animate={{ y: [0, -8, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-              >
-                <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ background: 'var(--color-accent-blue-glow)', color: 'var(--color-accent-blue)' }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <rect x="3" y="3" width="18" height="18" rx="3"/>
-                    <path d="M9 9h6M9 13h4"/>
-                  </svg>
-                </div>
-                <div>
-                  <div className="text-[11px] font-bold" style={{ color: 'var(--text-primary)' }}>Brand Kit</div>
-                  <div className="text-[10px]" style={{ color: 'var(--text-faint)' }}>Logo · Colors · Type</div>
-                </div>
-              </motion.div>
-            </div>
-
-            <div className="absolute -right-6 top-[20%]">
-              <motion.div
-                className="rounded-2xl p-3.5 flex items-center gap-3 min-w-[150px]"
-                style={{
-                  background: 'linear-gradient(145deg, var(--bg-card) 0%, var(--bg-card-end) 100%)',
-                  border: '1px solid var(--border-subtle)',
-                  boxShadow: '0 8px 30px rgba(0,0,0,0.08)',
-                }}
-                animate={{ y: [0, 8, 0] }}
-                transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-              >
-                <div className="flex gap-1.5">
-                  {['var(--color-accent-blue)','var(--color-accent-purple)','var(--color-accent-warm)','var(--color-accent-purple)','#1a1a1a'].map((c) => (
-                    <div key={c} className="w-5 h-5 rounded-full border-2 border-white/20 shadow-sm" style={{ background: c }} />
-                  ))}
-                </div>
-              </motion.div>
-            </div>
-
-            <div className="absolute -left-4 bottom-[18%]">
-              <motion.div
-                className="rounded-2xl px-4 py-3"
-                style={{
-                  background: 'linear-gradient(135deg, var(--color-accent-blue), var(--color-accent-purple))',
-                  boxShadow: '0 8px 30px var(--color-accent-blue-glow)',
-                }}
-                animate={{ scale: [1, 1.04, 1] }}
-                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
-              >
-                <div className="text-white font-black text-[13px]">5★ Rated</div>
-                <div className="text-white/60 text-[10px]">By every client</div>
-              </motion.div>
-            </div>
           </motion.div>
 
         </div>

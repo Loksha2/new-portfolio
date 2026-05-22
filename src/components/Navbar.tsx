@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import { useTheme } from './ThemeContext';
 import { useSiteSettings } from './SiteSettingsContext';
+import { smoothScrollTo } from '../utils/scroll';
 
 const navLinks = [
   { label: 'Home', href: '#home' },
@@ -32,8 +33,7 @@ const Navbar = () => {
 
   const handleNavClick = (href: string) => {
     setMobileOpen(false);
-    const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    smoothScrollTo(href);
   };
 
   const handleToggle = () => {

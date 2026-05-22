@@ -1,6 +1,7 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { Layers, Image, Eye, ArrowUpRight } from 'lucide-react';
+import { smoothScrollTo } from '../utils/scroll';
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
@@ -222,7 +223,7 @@ const Services = () => {
             href="#contact"
             onClick={(e) => {
               e.preventDefault();
-              document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
+              smoothScrollTo('#contact');
             }}
             className="btn-primary inline-flex items-center gap-2"
             whileHover={{ scale: 1.03 }}

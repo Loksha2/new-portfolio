@@ -102,14 +102,14 @@
   html { scroll-behavior: smooth; }
 
   body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     background-color: var(--bg-page);
     color: var(--text-primary);
     overflow-x: hidden;
     transition: background-color 0.35s ease, color 0.35s ease;
   }
 
-  h1,h2,h3 { font-family:'Inter',sans-serif; font-weight:800; }
+  h1,h2,h3 { font-family: 'Outfit', sans-serif; font-weight:800; }
 
   ::selection {
     background-color: rgba(79,124,255,0.2);

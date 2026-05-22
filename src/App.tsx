@@ -18,7 +18,6 @@ import Footer from './components/Footer';
 import BackToTop from './components/BackToTop';
 import ParticleBackground from './components/ParticleBackground';
 import AdminDashboard from './components/AdminDashboard'; 
-import BrandPaletteSwitcher from './components/BrandPaletteSwitcher';
 
 function App() {
   const [splashDone, setSplashDone] = useState(false);
@@ -63,7 +62,6 @@ function App() {
             <Contact />
           </main>
           <Footer />
-          <BrandPaletteSwitcher />
           <BackToTop />
         </div>
       </ThemeProvider>

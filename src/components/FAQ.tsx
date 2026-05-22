@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { HelpCircle, ChevronDown, MessageSquare, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react';
+import { smoothScrollTo } from '../utils/scroll';
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
@@ -313,6 +314,10 @@ const FAQ = () => {
           </div>
           <a
             href="#contact"
+            onClick={(e) => {
+              e.preventDefault();
+              smoothScrollTo('#contact');
+            }}
             className="flex items-center gap-2 text-[13px] font-bold text-white px-5 py-2.5 rounded-full transition-all duration-300 shadow-md"
             style={{
               background: 'linear-gradient(90deg, var(--color-accent-blue), var(--color-accent-purple))',
