@@ -9,7 +9,11 @@ const SplashScreen = ({ onDone }: { onDone: () => void }) => {
   useEffect(() => {
     // Check if already shown in this session
     const seen = sessionStorage.getItem('splash_seen');
-    if (seen) { onDone(); return; }
+    if (seen) {
+      setPhase('out');
+      onDone();
+      return;
+    }
 
     const t1 = setTimeout(() => setPhase('hold'), 600);
     const t2 = setTimeout(() => setPhase('out'), 1800);
