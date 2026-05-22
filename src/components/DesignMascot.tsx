@@ -41,21 +41,40 @@ export const DesignMascot = () => {
     const el = containerRef.current;
     if (!el) return;
 
+    let rect = el.getBoundingClientRect();
+    let cx = rect.left + rect.width / 2;
+    let cy = rect.top + rect.height * 0.38;
+
+    const handleResizeOrScroll = () => {
+      rect = el.getBoundingClientRect();
+      cx = rect.left + rect.width / 2;
+      cy = rect.top + rect.height * 0.38;
+    };
+
     const handleMove = (e: MouseEvent) => {
-      const rect = el.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height * 0.38;
       const dx = e.clientX - cx;
       const dy = e.clientY - cy;
       const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist === 0) return;
       const maxDist = 220;
       const clamp = Math.min(dist, maxDist) / maxDist;
       eyeOffsetX.set((dx / dist) * clamp * 4.5);
       eyeOffsetY.set((dy / dist) * clamp * 4.5);
     };
 
-    window.addEventListener('mousemove', handleMove);
-    return () => window.removeEventListener('mousemove', handleMove);
+    window.addEventListener('mousemove', handleMove, { passive: true });
+    window.addEventListener('resize', handleResizeOrScroll);
+    window.addEventListener('scroll', handleResizeOrScroll, { passive: true });
+
+    // Handle initial layout shift
+    const timer = setTimeout(handleResizeOrScroll, 1000);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMove);
+      window.removeEventListener('resize', handleResizeOrScroll);
+      window.removeEventListener('scroll', handleResizeOrScroll);
+      clearTimeout(timer);
+    };
   }, [eyeOffsetX, eyeOffsetY]);
 
   // Blink loop

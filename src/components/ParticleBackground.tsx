@@ -83,36 +83,48 @@ const ParticleBackground = () => {
   const timeRef = useRef(0);
   const noiseRef = useRef(new SimplexNoise());
 
-  // ── Color Interpolation (Horizontal Gradient) ──────────────────────
-  const getColorRGB = useCallback((xPercent: number) => {
-    // Left (Blue) -> Mid-Left (Purple) -> Mid-Right (Pink) -> Right (Orange/Yellow)
-    let r = 0, g = 0, b = 0;
-    if (xPercent < 0.35) {
-      const t = xPercent / 0.35;
-      r = 42 + (124 - 42) * t;
-      g = 92 + (92 - 92) * t;
-      b = 238 + (252 - 238) * t;
-    } else if (xPercent < 0.65) {
-      const t = (xPercent - 0.35) / 0.3;
-      r = 124 + (235 - 124) * t;
-      g = 92 + (64 - 92) * t;
-      b = 252 + (120 - 252) * t;
-    } else {
-      const t = (xPercent - 0.65) / 0.35;
-      r = 235 + (255 - 235) * t;
-      g = 64 + (110 - 64) * t;
-      b = 120 + (50 - 120) * t;
+  // ── Pre-computed Color & Alpha Lookup to avoid string allocations in loop ──
+  const rgbaCacheRef = useRef<string[][]>([]);
+  if (rgbaCacheRef.current.length === 0) {
+    const steps = 120;
+    const alphaSteps = 21; // 0.0 to 1.0 in steps of 0.05
+    for (let i = 0; i < steps; i++) {
+      const pct = i / (steps - 1);
+      let r = 0, g = 0, b = 0;
+      if (pct < 0.35) {
+        const t = pct / 0.35;
+        r = 42 + (124 - 42) * t;
+        g = 92 + (92 - 92) * t;
+        b = 238 + (252 - 238) * t;
+      } else if (pct < 0.65) {
+        const t = (pct - 0.35) / 0.3;
+        r = 124 + (235 - 124) * t;
+        g = 92 + (64 - 92) * t;
+        b = 252 + (120 - 252) * t;
+      } else {
+        const t = (pct - 0.65) / 0.35;
+        r = 235 + (255 - 235) * t;
+        g = 64 + (110 - 64) * t;
+        b = 120 + (50 - 120) * t;
+      }
+      
+      const rgbStr = `${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)}`;
+      const row: string[] = [];
+      for (let a = 0; a < alphaSteps; a++) {
+        const alphaVal = a / (alphaSteps - 1);
+        row.push(`rgba(${rgbStr}, ${alphaVal.toFixed(2)})`);
+      }
+      rgbaCacheRef.current.push(row);
     }
-    return `${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)}`;
-  }, []);
+  }
 
   // ── Create 3D Sphere Particles ─────────────────────────────────────
   const createSphereParticles = useCallback((w: number, h: number) => {
     const isMobile = w < 768;
     const R = Math.min(w, h) * (isMobile ? 0.5 : 0.45); // Sphere radius
     
-    const latCount = isMobile ? 18 : 26; // Horizontal slices
-    const lonCount = isMobile ? 30 : 42; // Vertical slices
+    const latCount = isMobile ? 12 : 18; // Horizontal slices (Reduced for performance)
+    const lonCount = isMobile ? 22 : 30; // Vertical slices (Reduced for performance)
     const particles: Particle[] = [];
 
     for (let i = 0; i < latCount; i++) {
@@ -286,13 +298,18 @@ const ParticleBackground = () => {
 
       // 8. Draw oriented dash segment
       const dashLength = 3.5 + Math.min(10, speed * 2.5) + (1 - depthNorm) * 4;
-      const rgb = getColorRGB(p.px / w);
+      
+      // Direct lookup from precomputed color cache to avoid string allocations
+      const pct = Math.max(0, Math.min(1, p.px / w));
+      const rgbIndex = Math.floor(pct * 119);
+      const alphaIndex = Math.max(0, Math.min(20, Math.round(alpha * 20)));
+      const strokeStyle = rgbaCacheRef.current[rgbIndex]?.[alphaIndex] || "rgba(124, 92, 252, 0.5)";
 
       ctx.beginPath();
       ctx.moveTo(p.px - Math.cos(angle) * (dashLength / 2), p.py - Math.sin(angle) * (dashLength / 2));
       ctx.lineTo(p.px + Math.cos(angle) * (dashLength / 2), p.py + Math.sin(angle) * (dashLength / 2));
       
-      ctx.strokeStyle = `rgba(${rgb}, ${alpha})`;
+      ctx.strokeStyle = strokeStyle;
       ctx.lineWidth = thickness;
       ctx.lineCap = 'round';
       ctx.stroke();
@@ -300,7 +317,7 @@ const ParticleBackground = () => {
 
     ctx.restore();
     animFrameRef.current = requestAnimationFrame(animate);
-  }, [getColorRGB]);
+  }, []);
 
   // ── Setup Resize & Events ──────────────────────────────────────────
   useEffect(() => {
