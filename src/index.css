@@ -27,10 +27,10 @@
     --color-muted:   #444444;
     --color-accent-blue:   #b72120;
     --color-accent-purple: #8c1615;
-    --color-accent-warm:   #e03c3b;
+    --color-accent-warm:   #3e525a;
     --color-accent-blue-glow: rgba(183, 33, 32, 0.15);
     --color-accent-purple-glow: rgba(140, 22, 21, 0.15);
-    --color-accent-warm-glow: rgba(224, 60, 59, 0.15);
+    --color-accent-warm-glow: rgba(62, 82, 90, 0.15);
 
     --bg-page:       #f5f0e8;
     --bg-section-alt:#faf8f4;

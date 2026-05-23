@@ -166,7 +166,7 @@ const defaultHero: HeroSettings = {
   stats: [
     { value: "1+", label: "Year Experience", color: "#b72120" },
     { value: "30+", label: "Projects Delivered", color: "#8c1615" },
-    { value: "100%", label: "Client Satisfaction", color: "#e03c3b" }
+    { value: "100%", label: "Client Satisfaction", color: "#3e525a" }
   ],
   floatingPills: ["Logo Design", "Brand Identity", "Social Media", "Typography"]
 };
@@ -185,7 +185,7 @@ const defaultAbout: AboutSettings = {
   stats: [
     { value: "1+", unit: "Year", label: "Experience", color: "#b72120" },
     { value: "∞", unit: "", label: "Brand Identity Design", color: "#8c1615" },
-    { value: "30+", unit: "", label: "Social Media Posters", color: "#e03c3b" }
+    { value: "30+", unit: "", label: "Social Media Posters", color: "#3e525a" }
   ],
   skills: [
     { label: "Brand Identity", level: 90 },

@@ -30,7 +30,7 @@ const getDynamicColor = (color: string) => {
   const lowerColor = color.toLowerCase();
   if (lowerColor === '#4f7cff' || lowerColor === '#b72120') return 'var(--color-accent-blue)';
   if (lowerColor === '#7c5cfc' || lowerColor === '#8c1615') return 'var(--color-accent-purple)';
-  if (lowerColor === '#ff6b35' || lowerColor === '#e03c3b') return 'var(--color-accent-warm)';
+  if (lowerColor === '#ff6b35' || lowerColor === '#e03c3b' || lowerColor === '#3e525a') return 'var(--color-accent-warm)';
   return color;
 };
 
