@@ -62,9 +62,9 @@ const FloatingElements = () => (
 
 const getDynamicColor = (color: string) => {
   const c = color?.toLowerCase();
-  if (c === '#4f7cff') return 'var(--color-accent-blue)';
-  if (c === '#7c5cfc') return 'var(--color-accent-purple)';
-  if (c === '#ff6b35') return 'var(--color-accent-warm)';
+  if (c === '#4f7cff' || c === '#b72120') return 'var(--color-accent-blue)';
+  if (c === '#7c5cfc' || c === '#8c1615') return 'var(--color-accent-purple)';
+  if (c === '#ff6b35' || c === '#e03c3b') return 'var(--color-accent-warm)';
   return color;
 };
 

@@ -164,9 +164,9 @@ const defaultHero: HeroSettings = {
   ctaSecondary: "See Pricing",
   profileImage: "",
   stats: [
-    { value: "1+", label: "Year Experience", color: "#4f7cff" },
-    { value: "30+", label: "Projects Delivered", color: "#7c5cfc" },
-    { value: "100%", label: "Client Satisfaction", color: "#ff6b35" }
+    { value: "1+", label: "Year Experience", color: "#b72120" },
+    { value: "30+", label: "Projects Delivered", color: "#8c1615" },
+    { value: "100%", label: "Client Satisfaction", color: "#e03c3b" }
   ],
   floatingPills: ["Logo Design", "Brand Identity", "Social Media", "Typography"]
 };
@@ -183,9 +183,9 @@ const defaultAbout: AboutSettings = {
   quote:
     "Good design is not just how something looks — it is how something feels, communicates, and endures in the mind of the viewer.",
   stats: [
-    { value: "1+", unit: "Year", label: "Experience", color: "#4f7cff" },
-    { value: "∞", unit: "", label: "Brand Identity Design", color: "#7c5cfc" },
-    { value: "30+", unit: "", label: "Social Media Posters", color: "#ff6b35" }
+    { value: "1+", unit: "Year", label: "Experience", color: "#b72120" },
+    { value: "∞", unit: "", label: "Brand Identity Design", color: "#8c1615" },
+    { value: "30+", unit: "", label: "Social Media Posters", color: "#e03c3b" }
   ],
   skills: [
     { label: "Brand Identity", level: 90 },
