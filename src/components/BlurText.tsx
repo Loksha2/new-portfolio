@@ -121,7 +121,7 @@ const BlurText: React.FC<BlurTextProps> = ({
                 className={isGradient ? "text-gradient" : ""}
                 style={
                   isItalicSerif
-                    ? { fontFamily: "'Playfair Display', serif", fontStyle: 'italic', fontWeight: 900, textTransform: 'none' }
+                    ? { fontFamily: "'Playfair Display', serif", fontStyle: 'italic', fontWeight: 900, textTransform: 'none', color: 'var(--color-accent-warm)' }
                     : undefined
                 }
               >
@@ -138,7 +138,7 @@ const BlurText: React.FC<BlurTextProps> = ({
                 className={isGradient ? "text-gradient" : ""}
                 style={
                   isItalicSerif
-                    ? { fontFamily: "'Playfair Display', serif", fontStyle: 'italic', fontWeight: 900, textTransform: 'none' }
+                    ? { fontFamily: "'Playfair Display', serif", fontStyle: 'italic', fontWeight: 900, textTransform: 'none', color: 'var(--color-accent-warm)' }
                     : undefined
                 }
               >

@@ -99,7 +99,13 @@ const DetailModal = ({ project, onClose }: { project: Project; onClose: () => vo
             )}
             <div className="flex flex-wrap gap-2">
               {project.tags.map(tag => (
-                <span key={tag} className="text-[11px] font-medium px-3 py-1 rounded-full bg-white/5 text-gray-400">{tag}</span>
+                <span
+                  key={tag}
+                  className="text-[11px] font-semibold px-3 py-1 rounded-full border border-[var(--color-accent-warm-glow)]"
+                  style={{ backgroundColor: 'var(--color-accent-warm-glow)', color: 'var(--color-accent-warm)' }}
+                >
+                  {tag}
+                </span>
               ))}
             </div>
           </div>
@@ -226,7 +232,15 @@ export default function Projects() {
                     <p className="text-xs text-gray-400 line-clamp-2 leading-relaxed mb-4">{project.description}</p>
                     <div className="flex items-center justify-between">
                       <div className="flex gap-1.5">
-                        {project.tags.slice(0, 2).map(t => <span key={t} className="text-[10px] px-2 py-0.5 bg-white/5 rounded-full text-gray-400">{t}</span>)}
+                        {project.tags.slice(0, 2).map(t => (
+                          <span
+                            key={t}
+                            className="text-[10px] px-2.5 py-0.5 rounded-full font-semibold border border-[var(--color-accent-warm-glow)]"
+                            style={{ backgroundColor: 'var(--color-accent-warm-glow)', color: 'var(--color-accent-warm)' }}
+                          >
+                            {t}
+                          </span>
+                        ))}
                       </div>
                       <ExternalLink size={14} className="text-gray-500 group-hover:text-white transition-colors" />
                     </div>

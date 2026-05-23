@@ -68,6 +68,8 @@
     --color-charcoal:#f5f0e8;
     --color-slate:   #e2ddd5;
     --color-muted:   #a29d94;
+    --color-accent-warm: #8fa9b5;
+    --color-accent-warm-glow: rgba(143, 169, 181, 0.15);
 
     --bg-page:       #000000;
     --bg-section-alt:#0a0a0c;
