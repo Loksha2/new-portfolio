@@ -139,88 +139,55 @@ export default function Projects() {
   const [loading, setLoading] = useState(true);
   const [detailProject, setDetailProject] = useState<Project | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'instagram'>('grid');
+  const [activeIndex, setActiveIndex] = useState(0);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
+
+  // Touch/swipe state
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
 
   const allProjects = [...STATIC_PROJECTS, ...userProjects];
   const filtered = activeFilter === 'all' ? allProjects : allProjects.filter(p => p.category === activeFilter);
 
-  const updateCardTransforms = () => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    if (!rect.width) return;
-    const containerCenter = rect.left + rect.width / 2;
-    const cards = el.querySelectorAll('.project-card');
-    if (!cards.length) return;
-    
-    cards.forEach((card) => {
-      const cardRect = card.getBoundingClientRect();
-      const cardCenter = cardRect.left + cardRect.width / 2;
-      const distanceFromCenter = cardCenter - containerCenter;
-      const maxDistance = rect.width * 0.8;
-      if (maxDistance <= 0) return;
-      const ratio = Math.max(-1, Math.min(1, distanceFromCenter / maxDistance));
-      if (isNaN(ratio)) return;
-      
-      const angle = -ratio * 8; // subtle 8-degree Y rotation
-      const scale = 1 - Math.abs(ratio) * 0.04; // subtle 4% scale down on sides
-      const translateZ = -Math.abs(ratio) * 40; // 3D depth shift
-      const opacity = 1 - Math.abs(ratio) * 0.25; // 25% fade on sides
-      
-      const htmlCard = card as HTMLElement;
-      htmlCard.style.transform = `perspective(1200px) rotateY(${angle}deg) scale(${scale}) translateZ(${translateZ}px)`;
-      htmlCard.style.opacity = `${opacity}`;
-    });
-  };
-
-  const handleScrollEvent = () => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const maxScroll = el.scrollWidth - el.clientWidth;
-    if (maxScroll <= 0) {
-      setScrollProgress(0);
-    } else {
-      const pct = (el.scrollLeft / maxScroll) * 100;
-      setScrollProgress(pct);
-    }
-    updateCardTransforms();
-  };
-
-  const scroll = (direction: 'left' | 'right') => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const card = el.querySelector('.project-card');
-    const cardWidth = card ? card.clientWidth : 500;
-    const gap = 32; // gap-8 is 32px
-    const scrollAmount = cardWidth + gap;
-    el.scrollBy({
-      left: direction === 'left' ? -scrollAmount : scrollAmount,
-      behavior: 'smooth'
-    });
-  };
-
-  // Reset scroll when active filter changes
+  // Clamp activeIndex when filter changes
   useEffect(() => {
-    const el = scrollRef.current;
-    if (el) {
-      el.scrollLeft = 0;
-      setScrollProgress(0);
-      setTimeout(updateCardTransforms, 50);
-    }
+    setActiveIndex(0);
   }, [activeFilter]);
 
-  // Window resize handler
+  // Keyboard navigation
   useEffect(() => {
-    window.addEventListener('resize', updateCardTransforms);
-    return () => {
-      window.removeEventListener('resize', updateCardTransforms);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') {
+        setActiveIndex(prev => Math.min(filtered.length - 1, prev + 1));
+      } else if (e.key === 'ArrowLeft') {
+        setActiveIndex(prev => Math.max(0, prev - 1));
+      }
     };
-  }, []);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [filtered.length]);
 
-  // جلب المشاريع السحابية من قاعدة بيانات Supabase وقت تحميل الصفحة للزوار
+  const navigate = (direction: 'left' | 'right') => {
+    if (direction === 'left') {
+      setActiveIndex(prev => Math.max(0, prev - 1));
+    } else {
+      setActiveIndex(prev => Math.min(filtered.length - 1, prev + 1));
+    }
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.changedTouches[0].screenX;
+  };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    touchEndX.current = e.changedTouches[0].screenX;
+    const diff = touchStartX.current - touchEndX.current;
+    if (Math.abs(diff) > 50) {
+      navigate(diff > 0 ? 'right' : 'left');
+    }
+  };
+
+  // Supabase fetch
   useEffect(() => {
     const loadCloudProjects = async () => {
       setLoading(true);
@@ -228,7 +195,6 @@ export default function Projects() {
         .from('projects')
         .select('*')
         .order('id', { ascending: false });
-      
       if (!error && data) {
         setUserProjects(data.map(mapFromDb));
       }
@@ -236,14 +202,6 @@ export default function Projects() {
     };
     loadCloudProjects();
   }, []);
-
-  // Trigger initial 3D transforms when data loads
-  useEffect(() => {
-    if (!loading) {
-      const timer = setTimeout(updateCardTransforms, 150);
-      return () => clearTimeout(timer);
-    }
-  }, [filtered, loading]);
 
   // Switch default view mode when category changes
   useEffect(() => {
@@ -253,6 +211,34 @@ export default function Projects() {
       setViewMode('grid');
     }
   }, [activeFilter]);
+
+  // Compute card 3D transforms based on offset from active index
+  const getCardStyle = (index: number): React.CSSProperties => {
+    const offset = index - activeIndex;
+    const absOffset = Math.abs(offset);
+
+    // Only show max 3 cards on each side
+    if (absOffset > 3) {
+      return { opacity: 0, pointerEvents: 'none', position: 'absolute', transform: 'scale(0)' };
+    }
+
+    const rotateY = offset * 35; // degrees
+    const translateX = offset * 220; // px horizontal spread
+    const translateZ = -absOffset * 180; // depth
+    const scale = 1 - absOffset * 0.12;
+    const opacity = 1 - absOffset * 0.25;
+    const zIndex = 10 - absOffset;
+
+    return {
+      transform: `translateX(${translateX}px) perspective(1200px) rotateY(${rotateY}deg) translateZ(${translateZ}px) scale(${scale})`,
+      opacity: Math.max(0, opacity),
+      zIndex,
+      position: 'absolute' as const,
+      transition: 'all 0.5s cubic-bezier(0.25, 0.1, 0.25, 1)',
+      filter: absOffset > 0 ? `brightness(${1 - absOffset * 0.15})` : 'none',
+      pointerEvents: absOffset === 0 ? 'auto' as const : 'auto' as const,
+    };
+  };
 
   return (
     <section id="projects" className="py-24 relative overflow-hidden" ref={ref} style={{ background: 'transparent' }}>
@@ -298,58 +284,85 @@ export default function Projects() {
             projects={allProjects} 
             onSelectProject={(project) => setDetailProject(project)} 
           />
+        ) : filtered.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-20 gap-2 text-gray-400">
+            <p className="text-sm">لا توجد مشاريع في هذا التصنيف.</p>
+          </div>
         ) : (
-          <div className="relative group/slider">
-            {/* Horizontal Scroll Area */}
+          <div className="relative">
+            {/* Coverflow 3D Carousel */}
             <div 
-              ref={scrollRef}
-              onScroll={handleScrollEvent}
-              className="flex overflow-x-auto gap-8 pb-10 snap-x snap-mandatory scrollbar-none scroll-smooth -mx-6 px-6 md:-mx-10 md:px-10"
-              style={{ transformStyle: 'preserve-3d', perspective: '1200px' }}
+              className="relative w-full flex items-center justify-center overflow-hidden"
+              style={{ height: '520px', perspective: '1200px' }}
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
             >
               {filtered.map((project, i) => {
                 const mainImage = project.previewImage || project.imageSrc;
+                const offset = i - activeIndex;
+                const absOffset = Math.abs(offset);
+                if (absOffset > 3) return null;
+
                 return (
                   <motion.div
-                    key={project.id} 
-                    initial={{ opacity: 0, y: 30 }} 
-                    animate={isInView ? { opacity: 1, y: 0 } : {}} 
-                    transition={{ duration: 0.5, delay: i * 0.05 }}
-                    onClick={() => setDetailProject(project)} 
-                    className="project-card group/card flex-shrink-0 w-[88vw] sm:w-[440px] md:w-[540px] bg-[#0c0c0e] border border-white/5 rounded-3xl overflow-hidden cursor-pointer hover:border-white/10 transition-all snap-start"
-                    style={{ transformStyle: 'preserve-3d' }}
+                    key={project.id}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                    transition={{ duration: 0.5, delay: Math.min(i * 0.05, 0.3) }}
+                    onClick={() => {
+                      if (i === activeIndex) {
+                        setDetailProject(project);
+                      } else {
+                        setActiveIndex(i);
+                      }
+                    }}
+                    className={`group/card w-[280px] sm:w-[300px] md:w-[320px] rounded-2xl overflow-hidden cursor-pointer border transition-all duration-500 ${
+                      i === activeIndex 
+                        ? 'border-white/20 shadow-[0_0_60px_rgba(0,0,0,0.8)]' 
+                        : 'border-white/5'
+                    }`}
+                    style={{
+                      ...getCardStyle(i),
+                      transformStyle: 'preserve-3d',
+                      background: '#0c0c0e',
+                    }}
                   >
-                    {/* Enlarged Image container */}
-                    <div className="relative h-[240px] sm:h-[320px] md:h-[400px] overflow-hidden bg-gray-900" style={{ background: project.gradient }}>
-                      {mainImage && (
+                    {/* Tall card image — phone-like aspect ratio */}
+                    <div 
+                      className="relative w-full overflow-hidden bg-gray-900" 
+                      style={{ 
+                        height: i === activeIndex ? '420px' : '380px',
+                        background: project.gradient || '#111',
+                        transition: 'height 0.5s cubic-bezier(0.25, 0.1, 0.25, 1)',
+                      }}
+                    >
+                      {mainImage ? (
                         <img 
                           src={mainImage} 
-                          alt="" 
-                          className="w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-700 ease-out" 
+                          alt={project.title}
+                          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover/card:scale-105"
+                          draggable={false}
                         />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-gray-600">
+                          <ExternalLink size={32} />
+                        </div>
                       )}
-                      {/* Gradient overlay for better look */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover/card:opacity-40 transition-opacity duration-300" />
-                    </div>
-                    {/* Card Content with larger text and padding */}
-                    <div className="p-6 md:p-8">
-                      <h3 className="text-lg md:text-xl font-black text-white mb-2 tracking-tight group-hover/card:text-[var(--color-accent-blue)] transition-colors duration-300">{project.title}</h3>
-                      <p className="text-xs md:text-sm text-gray-400 line-clamp-2 leading-relaxed mb-6">{project.description}</p>
-                      <div className="flex items-center justify-between">
-                        <div className="flex gap-2">
-                          {project.tags.slice(0, 3).map(t => (
-                            <span
-                              key={t}
-                              className="text-[10px] md:text-[11px] px-3 py-1 rounded-full font-semibold border border-[var(--color-accent-warm-glow)]"
-                              style={{ backgroundColor: 'var(--color-accent-warm-glow)', color: 'var(--color-accent-warm)' }}
-                            >
-                              {t}
-                            </span>
-                          ))}
-                        </div>
-                        <div className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-gray-400 group-hover/card:bg-[var(--color-accent-blue)] group-hover/card:text-white transition-all duration-300">
-                          <ExternalLink size={15} />
-                        </div>
+                      {/* Bottom gradient overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                      
+                      {/* Title & Description overlay at bottom of card */}
+                      <div className="absolute bottom-0 left-0 right-0 p-5">
+                        <h3 className={`font-black text-white mb-1 tracking-tight transition-all duration-300 ${
+                          i === activeIndex ? 'text-lg' : 'text-sm'
+                        }`}>
+                          {project.title}
+                        </h3>
+                        {i === activeIndex && (
+                          <p className="text-xs text-gray-300 line-clamp-1 leading-relaxed">
+                            {project.description}
+                          </p>
+                        )}
                       </div>
                     </div>
                   </motion.div>
@@ -357,19 +370,25 @@ export default function Projects() {
               })}
             </div>
 
-            {/* Slider Navigation Buttons (Left/Right Arrows) - Floating on sides */}
+            {/* Navigation Arrows */}
             {filtered.length > 1 && (
               <>
                 <button 
-                  onClick={() => scroll('left')} 
-                  className="absolute left-2 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border border-white/15 bg-black/65 backdrop-blur-md text-white flex items-center justify-center shadow-2xl hover:bg-white hover:text-black hover:border-white hover:scale-105 transition-all z-20 cursor-pointer hidden md:flex"
+                  onClick={() => navigate('left')} 
+                  disabled={activeIndex === 0}
+                  className={`absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border bg-black/60 backdrop-blur-md text-white flex items-center justify-center shadow-2xl transition-all z-30 cursor-pointer ${
+                    activeIndex === 0 ? 'opacity-30 cursor-not-allowed border-white/5' : 'border-white/15 hover:bg-white hover:text-black hover:border-white hover:scale-110'
+                  }`}
                   aria-label="Previous Project"
                 >
                   <ChevronLeft size={22} />
                 </button>
                 <button 
-                  onClick={() => scroll('right')} 
-                  className="absolute right-2 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border border-white/15 bg-black/65 backdrop-blur-md text-white flex items-center justify-center shadow-2xl hover:bg-white hover:text-black hover:border-white hover:scale-105 transition-all z-20 cursor-pointer hidden md:flex"
+                  onClick={() => navigate('right')} 
+                  disabled={activeIndex === filtered.length - 1}
+                  className={`absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border bg-black/60 backdrop-blur-md text-white flex items-center justify-center shadow-2xl transition-all z-30 cursor-pointer ${
+                    activeIndex === filtered.length - 1 ? 'opacity-30 cursor-not-allowed border-white/5' : 'border-white/15 hover:bg-white hover:text-black hover:border-white hover:scale-110'
+                  }`}
                   aria-label="Next Project"
                 >
                   <ChevronRight size={22} />
@@ -377,15 +396,26 @@ export default function Projects() {
               </>
             )}
 
-            {/* Sleek bottom progress bar indicator */}
+            {/* Bottom dot indicators + project counter */}
             {filtered.length > 1 && (
-              <div className="mt-8 flex justify-center items-center gap-4">
-                <div className="w-32 h-1 bg-white/10 rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-[var(--color-accent-blue)] transition-all duration-200"
-                    style={{ width: `${scrollProgress}%` }}
-                  />
+              <div className="mt-6 flex flex-col items-center gap-3">
+                <div className="flex items-center gap-1.5">
+                  {filtered.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setActiveIndex(i)}
+                      className={`rounded-full transition-all duration-300 ${
+                        i === activeIndex 
+                          ? 'w-6 h-2 bg-[var(--color-accent-blue)]' 
+                          : 'w-2 h-2 bg-white/20 hover:bg-white/40'
+                      }`}
+                      aria-label={`Go to project ${i + 1}`}
+                    />
+                  ))}
                 </div>
+                <span className="text-[11px] text-gray-500 font-medium">
+                  {activeIndex + 1} / {filtered.length}
+                </span>
               </div>
             )}
           </div>
