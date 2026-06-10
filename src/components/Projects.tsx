@@ -212,45 +212,55 @@ export default function Projects() {
     }
   }, [activeFilter]);
 
-  // Compute card 3D transforms — side cards peek from BEHIND the center card
+  // Compute card 3D transforms — true coverflow with cards peeking from behind
   const getCardStyle = (index: number): React.CSSProperties => {
     const offset = index - activeIndex;
     const absOffset = Math.abs(offset);
     const direction = offset < 0 ? -1 : 1;
 
+    // Base positioning: all cards start centered in the container
+    const base: React.CSSProperties = {
+      position: 'absolute' as const,
+      left: '50%',
+      top: '50%',
+      transition: 'all 0.55s cubic-bezier(0.32, 0.72, 0, 1)',
+    };
+
     // Hide cards beyond 3 positions away
     if (absOffset > 3) {
-      return { opacity: 0, pointerEvents: 'none', position: 'absolute', transform: 'scale(0)' };
+      return { ...base, opacity: 0, pointerEvents: 'none', transform: 'translate(-50%, -50%) scale(0)' };
     }
 
-    // Center card: no transforms, front and center
+    // Center card: front and center, no rotation
     if (absOffset === 0) {
       return {
-        transform: 'translateX(0px) rotateY(0deg) scale(1)',
+        ...base,
+        transform: 'translate(-50%, -50%) scale(1)',
         opacity: 1,
         zIndex: 10,
-        position: 'absolute' as const,
-        transition: 'all 0.55s cubic-bezier(0.32, 0.72, 0, 1)',
         filter: 'none',
+        transformOrigin: 'center center',
       };
     }
 
-    // Side cards: extend BEYOND the center card edges so they're visible,
-    // rotated inward and scaled down to create depth
-    const translateX = direction * (320 + (absOffset - 1) * 160);
-    const rotateY = direction * -32;  // rotate away from center (negative = face outward)
-    const scale = 0.82 - (absOffset - 1) * 0.1;
-    const zIndex = 10 - absOffset;
-    const brightness = 0.65 - (absOffset - 1) * 0.15;
-    const opacity = 1 - (absOffset - 1) * 0.25;
+    // Side cards: peek from behind the center card
+    const tx = direction * (280 + (absOffset - 1) * 140); // offset from center
+    const ry = direction * -40; // rotate to face inward toward center
+    const s = 0.78 - (absOffset - 1) * 0.08;
+    const z = 10 - absOffset;
+    const b = Math.max(0.3, 0.6 - (absOffset - 1) * 0.15);
+    const o = Math.max(0.2, 1 - (absOffset - 1) * 0.3);
+
+    // Cards on the left hinge from their right edge, right cards from their left edge
+    const origin = direction < 0 ? 'right center' : 'left center';
 
     return {
-      transform: `translateX(${translateX}px) perspective(1200px) rotateY(${rotateY}deg) scale(${scale})`,
-      opacity: Math.max(0.15, opacity),
-      zIndex,
-      position: 'absolute' as const,
-      transition: 'all 0.55s cubic-bezier(0.32, 0.72, 0, 1)',
-      filter: `brightness(${Math.max(0.25, brightness)})`,
+      ...base,
+      transform: `translate(-50%, -50%) translateX(${tx}px) rotateY(${ry}deg) scale(${s})`,
+      opacity: o,
+      zIndex: z,
+      filter: `brightness(${b})`,
+      transformOrigin: origin,
     };
   };
 
