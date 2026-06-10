@@ -144,6 +144,9 @@ export default function Projects() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
 
+  const allProjects = [...STATIC_PROJECTS, ...userProjects];
+  const filtered = activeFilter === 'all' ? allProjects : allProjects.filter(p => p.category === activeFilter);
+
   const updateCardTransforms = () => {
     const el = scrollRef.current;
     if (!el) return;
@@ -250,9 +253,6 @@ export default function Projects() {
       setViewMode('grid');
     }
   }, [activeFilter]);
-
-  const allProjects = [...STATIC_PROJECTS, ...userProjects];
-  const filtered = activeFilter === 'all' ? allProjects : allProjects.filter(p => p.category === activeFilter);
 
   return (
     <section id="projects" className="py-24 relative overflow-hidden" ref={ref} style={{ background: 'transparent' }}>
