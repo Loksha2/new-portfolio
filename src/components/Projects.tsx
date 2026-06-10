@@ -148,14 +148,19 @@ export default function Projects() {
     const el = scrollRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
+    if (!rect.width) return;
     const containerCenter = rect.left + rect.width / 2;
     const cards = el.querySelectorAll('.project-card');
+    if (!cards.length) return;
+    
     cards.forEach((card) => {
       const cardRect = card.getBoundingClientRect();
       const cardCenter = cardRect.left + cardRect.width / 2;
       const distanceFromCenter = cardCenter - containerCenter;
       const maxDistance = rect.width * 0.8;
+      if (maxDistance <= 0) return;
       const ratio = Math.max(-1, Math.min(1, distanceFromCenter / maxDistance));
+      if (isNaN(ratio)) return;
       
       const angle = -ratio * 8; // subtle 8-degree Y rotation
       const scale = 1 - Math.abs(ratio) * 0.04; // subtle 4% scale down on sides
