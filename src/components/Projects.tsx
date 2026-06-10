@@ -28,9 +28,9 @@ const STATIC_PROJECTS: Project[] = [];
 const getDynamicColor = (color: string) => {
   if (!color) return 'var(--color-accent-blue)';
   const lowerColor = color.toLowerCase();
-  if (lowerColor === '#4f7cff' || lowerColor === '#b72120') return 'var(--color-accent-blue)';
-  if (lowerColor === '#7c5cfc' || lowerColor === '#8c1615') return 'var(--color-accent-purple)';
-  if (lowerColor === '#ff6b35' || lowerColor === '#e03c3b' || lowerColor === '#3e525a') return 'var(--color-accent-warm)';
+  if (lowerColor === '#4f7cff' || lowerColor === '#b72120' || lowerColor === '#008b8b') return 'var(--color-accent-blue)';
+  if (lowerColor === '#7c5cfc' || lowerColor === '#8c1615' || lowerColor === '#005a5a') return 'var(--color-accent-purple)';
+  if (lowerColor === '#ff6b35' || lowerColor === '#e03c3b' || lowerColor === '#3e525a' || lowerColor === '#95a5a6') return 'var(--color-accent-warm)';
   return color;
 };
 
