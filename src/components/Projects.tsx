@@ -141,6 +141,42 @@ export default function Projects() {
   const [viewMode, setViewMode] = useState<'grid' | 'instagram'>('grid');
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  const handleScrollEvent = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    if (maxScroll <= 0) {
+      setScrollProgress(0);
+      return;
+    }
+    const pct = (el.scrollLeft / maxScroll) * 100;
+    setScrollProgress(pct);
+  };
+
+  const scroll = (direction: 'left' | 'right') => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const card = el.querySelector('.project-card');
+    const cardWidth = card ? card.clientWidth : 500;
+    const gap = 32; // gap-8 is 32px
+    const scrollAmount = cardWidth + gap;
+    el.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth'
+    });
+  };
+
+  // Reset scroll when active filter changes
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (el) {
+      el.scrollLeft = 0;
+      setScrollProgress(0);
+    }
+  }, [activeFilter]);
 
   // جلب المشاريع السحابية من قاعدة بيانات Supabase وقت تحميل الصفحة للزوار
   useEffect(() => {
@@ -216,38 +252,93 @@ export default function Projects() {
             onSelectProject={(project) => setDetailProject(project)} 
           />
         ) : (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filtered.map((project, i) => {
-              const mainImage = project.previewImage || project.imageSrc;
-              return (
-                <motion.div
-                  key={project.id} initial={{ opacity: 0, y: 30 }} animate={isInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5, delay: i * 0.05 }}
-                  onClick={() => setDetailProject(project)} className="group bg-[#1c1c22] border border-white/5 rounded-2xl overflow-hidden cursor-pointer hover:-translate-y-2 transition-all"
-                >
-                  <div className="relative h-48 overflow-hidden bg-gray-800" style={{ background: project.gradient }}>
-                    {mainImage && <img src={mainImage} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />}
-                  </div>
-                  <div className="p-5">
-                    <h3 className="text-md font-bold text-white mb-1.5">{project.title}</h3>
-                    <p className="text-xs text-gray-400 line-clamp-2 leading-relaxed mb-4">{project.description}</p>
-                    <div className="flex items-center justify-between">
-                      <div className="flex gap-1.5">
-                        {project.tags.slice(0, 2).map(t => (
-                          <span
-                            key={t}
-                            className="text-[10px] px-2.5 py-0.5 rounded-full font-semibold border border-[var(--color-accent-warm-glow)]"
-                            style={{ backgroundColor: 'var(--color-accent-warm-glow)', color: 'var(--color-accent-warm)' }}
-                          >
-                            {t}
-                          </span>
-                        ))}
-                      </div>
-                      <ExternalLink size={14} className="text-gray-500 group-hover:text-white transition-colors" />
+          <div className="relative group/slider">
+            {/* Horizontal Scroll Area */}
+            <div 
+              ref={scrollRef}
+              onScroll={handleScrollEvent}
+              className="flex overflow-x-auto gap-8 pb-10 snap-x snap-mandatory scrollbar-none scroll-smooth -mx-6 px-6 md:-mx-10 md:px-10"
+            >
+              {filtered.map((project, i) => {
+                const mainImage = project.previewImage || project.imageSrc;
+                return (
+                  <motion.div
+                    key={project.id} 
+                    initial={{ opacity: 0, y: 30 }} 
+                    animate={isInView ? { opacity: 1, y: 0 } : {}} 
+                    transition={{ duration: 0.5, delay: i * 0.05 }}
+                    onClick={() => setDetailProject(project)} 
+                    className="project-card group/card flex-shrink-0 w-[88vw] sm:w-[440px] md:w-[540px] bg-[#0c0c0e] border border-white/5 rounded-3xl overflow-hidden cursor-pointer hover:border-white/10 transition-all snap-start"
+                  >
+                    {/* Enlarged Image container */}
+                    <div className="relative h-[240px] sm:h-[320px] md:h-[400px] overflow-hidden bg-gray-900" style={{ background: project.gradient }}>
+                      {mainImage && (
+                        <img 
+                          src={mainImage} 
+                          alt="" 
+                          className="w-full h-full object-cover group-hover/card:scale-105 transition-transform duration-700 ease-out" 
+                        />
+                      )}
+                      {/* Gradient overlay for better look */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover/card:opacity-40 transition-opacity duration-300" />
                     </div>
-                  </div>
-                </motion.div>
-              );
-            })}
+                    {/* Card Content with larger text and padding */}
+                    <div className="p-6 md:p-8">
+                      <h3 className="text-lg md:text-xl font-black text-white mb-2 tracking-tight group-hover/card:text-[var(--color-accent-blue)] transition-colors duration-300">{project.title}</h3>
+                      <p className="text-xs md:text-sm text-gray-400 line-clamp-2 leading-relaxed mb-6">{project.description}</p>
+                      <div className="flex items-center justify-between">
+                        <div className="flex gap-2">
+                          {project.tags.slice(0, 3).map(t => (
+                            <span
+                              key={t}
+                              className="text-[10px] md:text-[11px] px-3 py-1 rounded-full font-semibold border border-[var(--color-accent-warm-glow)]"
+                              style={{ backgroundColor: 'var(--color-accent-warm-glow)', color: 'var(--color-accent-warm)' }}
+                            >
+                              {t}
+                            </span>
+                          ))}
+                        </div>
+                        <div className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-gray-400 group-hover/card:bg-[var(--color-accent-blue)] group-hover/card:text-white transition-all duration-300">
+                          <ExternalLink size={15} />
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+
+            {/* Slider Navigation Buttons (Left/Right Arrows) - Floating on sides */}
+            {filtered.length > 1 && (
+              <>
+                <button 
+                  onClick={() => scroll('left')} 
+                  className="absolute left-2 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border border-white/15 bg-black/65 backdrop-blur-md text-white flex items-center justify-center shadow-2xl hover:bg-white hover:text-black hover:border-white hover:scale-105 transition-all z-20 cursor-pointer hidden md:flex"
+                  aria-label="Previous Project"
+                >
+                  <ChevronLeft size={22} />
+                </button>
+                <button 
+                  onClick={() => scroll('right')} 
+                  className="absolute right-2 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border border-white/15 bg-black/65 backdrop-blur-md text-white flex items-center justify-center shadow-2xl hover:bg-white hover:text-black hover:border-white hover:scale-105 transition-all z-20 cursor-pointer hidden md:flex"
+                  aria-label="Next Project"
+                >
+                  <ChevronRight size={22} />
+                </button>
+              </>
+            )}
+
+            {/* Sleek bottom progress bar indicator */}
+            {filtered.length > 1 && (
+              <div className="mt-8 flex justify-center items-center gap-4">
+                <div className="w-32 h-1 bg-white/10 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-[var(--color-accent-blue)] transition-all duration-200"
+                    style={{ width: `${scrollProgress}%` }}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
