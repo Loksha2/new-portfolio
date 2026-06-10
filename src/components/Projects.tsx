@@ -218,49 +218,43 @@ export default function Projects() {
     const absOffset = Math.abs(offset);
     const direction = offset < 0 ? -1 : 1;
 
-    // Base positioning: all cards start centered in the container
-    const base: React.CSSProperties = {
-      position: 'absolute' as const,
-      left: '50%',
-      top: '50%',
+    // All cards sit in the same grid cell (stacked centered)
+    // We only apply transforms to fan them out
+    const gridBase: React.CSSProperties = {
+      gridArea: '1 / 1',
       transition: 'all 0.55s cubic-bezier(0.32, 0.72, 0, 1)',
     };
 
-    // Hide cards beyond 3 positions away
-    if (absOffset > 3) {
-      return { ...base, opacity: 0, pointerEvents: 'none', transform: 'translate(-50%, -50%) scale(0)' };
+    // Hide cards beyond 2 positions away
+    if (absOffset > 2) {
+      return { ...gridBase, opacity: 0, pointerEvents: 'none', transform: 'scale(0.5)', zIndex: 0 };
     }
 
     // Center card: front and center, no rotation
     if (absOffset === 0) {
       return {
-        ...base,
-        transform: 'translate(-50%, -50%) scale(1)',
+        ...gridBase,
+        transform: 'translateX(0px) rotateY(0deg) scale(1)',
         opacity: 1,
-        zIndex: 10,
+        zIndex: 5,
         filter: 'none',
-        transformOrigin: 'center center',
       };
     }
 
     // Side cards: peek from behind the center card
-    const tx = direction * (280 + (absOffset - 1) * 140); // offset from center
-    const ry = direction * -40; // rotate to face inward toward center
-    const s = 0.78 - (absOffset - 1) * 0.08;
-    const z = 10 - absOffset;
-    const b = Math.max(0.3, 0.6 - (absOffset - 1) * 0.15);
-    const o = Math.max(0.2, 1 - (absOffset - 1) * 0.3);
-
-    // Cards on the left hinge from their right edge, right cards from their left edge
-    const origin = direction < 0 ? 'right center' : 'left center';
+    const tx = direction * (260 + (absOffset - 1) * 100);
+    const ry = direction * -40;
+    const s = 0.72 - (absOffset - 1) * 0.08;
+    const z = 5 - absOffset;
+    const b = Math.max(0.35, 0.55 - (absOffset - 1) * 0.15);
+    const o = Math.max(0.3, 0.9 - (absOffset - 1) * 0.3);
 
     return {
-      ...base,
-      transform: `translate(-50%, -50%) translateX(${tx}px) rotateY(${ry}deg) scale(${s})`,
+      ...gridBase,
+      transform: `translateX(${tx}px) rotateY(${ry}deg) scale(${s})`,
       opacity: o,
       zIndex: z,
       filter: `brightness(${b})`,
-      transformOrigin: origin,
     };
   };
 
@@ -316,8 +310,13 @@ export default function Projects() {
           <div className="relative">
             {/* Coverflow 3D Carousel */}
             <div 
-              className="relative w-full flex items-center justify-center"
-              style={{ height: '680px', perspective: '1400px' }}
+              className="w-full"
+              style={{ 
+                display: 'grid',
+                placeItems: 'center',
+                perspective: '1200px',
+                minHeight: '650px',
+              }}
               onTouchStart={handleTouchStart}
               onTouchEnd={handleTouchEnd}
             >
@@ -325,7 +324,7 @@ export default function Projects() {
                 const mainImage = project.previewImage || project.imageSrc;
                 const offset = i - activeIndex;
                 const absOffset = Math.abs(offset);
-                if (absOffset > 3) return null;
+                if (absOffset > 2) return null;
 
                 return (
                   <motion.div
@@ -349,6 +348,7 @@ export default function Projects() {
                       ...getCardStyle(i),
                       transformStyle: 'preserve-3d',
                       background: '#0c0c0e',
+                      willChange: 'transform, opacity',
                     }}
                   >
                     {/* Full-size project poster */}
