@@ -336,15 +336,15 @@ export default function Projects() {
                         setActiveIndex(i);
                       }
                     }}
-                    className={`group/card w-[340px] sm:w-[400px] md:w-[460px] rounded-2xl overflow-hidden cursor-pointer border ${
+                    className={`group/card w-[340px] sm:w-[400px] md:w-[460px] rounded-[20px] overflow-hidden cursor-pointer ${'border-[6px] border-[#1a1a1e]'} ${
                       i === activeIndex 
-                        ? 'border-white/15 shadow-[0_8px_80px_rgba(0,0,0,0.9)]' 
-                        : 'border-white/5'
+                        ? 'shadow-[0_8px_80px_rgba(0,0,0,0.9)]' 
+                        : ''
                     }`}
                     style={{
                       ...getCardStyle(i),
                       transformStyle: 'preserve-3d' as const,
-                      background: '#0c0c0e',
+                      background: '#0e0e12',
                       willChange: 'transform, opacity',
                     }}
                   >
