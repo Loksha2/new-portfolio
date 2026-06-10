@@ -212,31 +212,45 @@ export default function Projects() {
     }
   }, [activeFilter]);
 
-  // Compute card 3D transforms based on offset from active index
+  // Compute card 3D transforms — side cards peek from BEHIND the center card
   const getCardStyle = (index: number): React.CSSProperties => {
-    const offset = index - activeIndex;
+    const offset = index - activeIndex; // -2, -1, 0, 1, 2
     const absOffset = Math.abs(offset);
+    const direction = offset < 0 ? -1 : 1;
 
-    // Only show max 3 cards on each side
+    // Hide cards beyond 3 positions away
     if (absOffset > 3) {
       return { opacity: 0, pointerEvents: 'none', position: 'absolute', transform: 'scale(0)' };
     }
 
-    const rotateY = offset * 35; // degrees
-    const translateX = offset * 220; // px horizontal spread
-    const translateZ = -absOffset * 180; // depth
-    const scale = 1 - absOffset * 0.12;
-    const opacity = 1 - absOffset * 0.25;
+    // Center card: no transforms
+    if (absOffset === 0) {
+      return {
+        transform: 'translateX(0) rotateY(0deg) scale(1)',
+        opacity: 1,
+        zIndex: 10,
+        position: 'absolute' as const,
+        transition: 'all 0.55s cubic-bezier(0.32, 0.72, 0, 1)',
+        filter: 'none',
+      };
+    }
+
+    // Side cards: peek from behind with overlap
+    // Each card shifts only partially so it overlaps behind the center
+    const translateX = direction * (180 + (absOffset - 1) * 120); // tight overlap
+    const rotateY = direction * 45; // strong rotation to face inward
+    const scale = 0.75 - (absOffset - 1) * 0.08; // progressively smaller
     const zIndex = 10 - absOffset;
+    const brightness = 0.55 - (absOffset - 1) * 0.15;
+    const opacity = 1 - (absOffset - 1) * 0.3;
 
     return {
-      transform: `translateX(${translateX}px) perspective(1200px) rotateY(${rotateY}deg) translateZ(${translateZ}px) scale(${scale})`,
-      opacity: Math.max(0, opacity),
+      transform: `translateX(${translateX}px) perspective(1200px) rotateY(${rotateY}deg) scale(${scale})`,
+      opacity: Math.max(0.1, opacity),
       zIndex,
       position: 'absolute' as const,
-      transition: 'all 0.5s cubic-bezier(0.25, 0.1, 0.25, 1)',
-      filter: absOffset > 0 ? `brightness(${1 - absOffset * 0.15})` : 'none',
-      pointerEvents: absOffset === 0 ? 'auto' as const : 'auto' as const,
+      transition: 'all 0.55s cubic-bezier(0.32, 0.72, 0, 1)',
+      filter: `brightness(${brightness})`,
     };
   };
 
@@ -293,7 +307,7 @@ export default function Projects() {
             {/* Coverflow 3D Carousel */}
             <div 
               className="relative w-full flex items-center justify-center overflow-hidden"
-              style={{ height: '520px', perspective: '1200px' }}
+              style={{ height: '680px', perspective: '1400px' }}
               onTouchStart={handleTouchStart}
               onTouchEnd={handleTouchEnd}
             >
@@ -316,9 +330,9 @@ export default function Projects() {
                         setActiveIndex(i);
                       }
                     }}
-                    className={`group/card w-[280px] sm:w-[300px] md:w-[320px] rounded-2xl overflow-hidden cursor-pointer border transition-all duration-500 ${
+                    className={`group/card w-[340px] sm:w-[400px] md:w-[460px] rounded-2xl overflow-hidden cursor-pointer border transition-all duration-500 ${
                       i === activeIndex 
-                        ? 'border-white/20 shadow-[0_0_60px_rgba(0,0,0,0.8)]' 
+                        ? 'border-white/15 shadow-[0_8px_80px_rgba(0,0,0,0.9)]' 
                         : 'border-white/5'
                     }`}
                     style={{
@@ -327,13 +341,12 @@ export default function Projects() {
                       background: '#0c0c0e',
                     }}
                   >
-                    {/* Tall card image — phone-like aspect ratio */}
+                    {/* Full-size project poster */}
                     <div 
                       className="relative w-full overflow-hidden bg-gray-900" 
                       style={{ 
-                        height: i === activeIndex ? '420px' : '380px',
+                        height: '580px',
                         background: project.gradient || '#111',
-                        transition: 'height 0.5s cubic-bezier(0.25, 0.1, 0.25, 1)',
                       }}
                     >
                       {mainImage ? (
