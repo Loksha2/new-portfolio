@@ -144,16 +144,41 @@ export default function Projects() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
 
+  const updateCardTransforms = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const containerCenter = rect.left + rect.width / 2;
+    const cards = el.querySelectorAll('.project-card');
+    cards.forEach((card) => {
+      const cardRect = card.getBoundingClientRect();
+      const cardCenter = cardRect.left + cardRect.width / 2;
+      const distanceFromCenter = cardCenter - containerCenter;
+      const maxDistance = rect.width * 0.8;
+      const ratio = Math.max(-1, Math.min(1, distanceFromCenter / maxDistance));
+      
+      const angle = -ratio * 8; // subtle 8-degree Y rotation
+      const scale = 1 - Math.abs(ratio) * 0.04; // subtle 4% scale down on sides
+      const translateZ = -Math.abs(ratio) * 40; // 3D depth shift
+      const opacity = 1 - Math.abs(ratio) * 0.25; // 25% fade on sides
+      
+      const htmlCard = card as HTMLElement;
+      htmlCard.style.transform = `perspective(1200px) rotateY(${angle}deg) scale(${scale}) translateZ(${translateZ}px)`;
+      htmlCard.style.opacity = `${opacity}`;
+    });
+  };
+
   const handleScrollEvent = () => {
     const el = scrollRef.current;
     if (!el) return;
     const maxScroll = el.scrollWidth - el.clientWidth;
     if (maxScroll <= 0) {
       setScrollProgress(0);
-      return;
+    } else {
+      const pct = (el.scrollLeft / maxScroll) * 100;
+      setScrollProgress(pct);
     }
-    const pct = (el.scrollLeft / maxScroll) * 100;
-    setScrollProgress(pct);
+    updateCardTransforms();
   };
 
   const scroll = (direction: 'left' | 'right') => {
@@ -175,8 +200,17 @@ export default function Projects() {
     if (el) {
       el.scrollLeft = 0;
       setScrollProgress(0);
+      setTimeout(updateCardTransforms, 50);
     }
   }, [activeFilter]);
+
+  // Window resize handler
+  useEffect(() => {
+    window.addEventListener('resize', updateCardTransforms);
+    return () => {
+      window.removeEventListener('resize', updateCardTransforms);
+    };
+  }, []);
 
   // جلب المشاريع السحابية من قاعدة بيانات Supabase وقت تحميل الصفحة للزوار
   useEffect(() => {
@@ -194,6 +228,14 @@ export default function Projects() {
     };
     loadCloudProjects();
   }, []);
+
+  // Trigger initial 3D transforms when data loads
+  useEffect(() => {
+    if (!loading) {
+      const timer = setTimeout(updateCardTransforms, 150);
+      return () => clearTimeout(timer);
+    }
+  }, [filtered, loading]);
 
   // Switch default view mode when category changes
   useEffect(() => {
@@ -258,6 +300,7 @@ export default function Projects() {
               ref={scrollRef}
               onScroll={handleScrollEvent}
               className="flex overflow-x-auto gap-8 pb-10 snap-x snap-mandatory scrollbar-none scroll-smooth -mx-6 px-6 md:-mx-10 md:px-10"
+              style={{ transformStyle: 'preserve-3d', perspective: '1200px' }}
             >
               {filtered.map((project, i) => {
                 const mainImage = project.previewImage || project.imageSrc;
@@ -269,6 +312,7 @@ export default function Projects() {
                     transition={{ duration: 0.5, delay: i * 0.05 }}
                     onClick={() => setDetailProject(project)} 
                     className="project-card group/card flex-shrink-0 w-[88vw] sm:w-[440px] md:w-[540px] bg-[#0c0c0e] border border-white/5 rounded-3xl overflow-hidden cursor-pointer hover:border-white/10 transition-all snap-start"
+                    style={{ transformStyle: 'preserve-3d' }}
                   >
                     {/* Enlarged Image container */}
                     <div className="relative h-[240px] sm:h-[320px] md:h-[400px] overflow-hidden bg-gray-900" style={{ background: project.gradient }}>
