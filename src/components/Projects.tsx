@@ -327,11 +327,8 @@ export default function Projects() {
                 if (absOffset > 2) return null;
 
                 return (
-                  <motion.div
+                  <div
                     key={project.id}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                    transition={{ duration: 0.5, delay: Math.min(i * 0.05, 0.3) }}
                     onClick={() => {
                       if (i === activeIndex) {
                         setDetailProject(project);
@@ -339,14 +336,14 @@ export default function Projects() {
                         setActiveIndex(i);
                       }
                     }}
-                    className={`group/card w-[340px] sm:w-[400px] md:w-[460px] rounded-2xl overflow-hidden cursor-pointer border transition-all duration-500 ${
+                    className={`group/card w-[340px] sm:w-[400px] md:w-[460px] rounded-2xl overflow-hidden cursor-pointer border ${
                       i === activeIndex 
                         ? 'border-white/15 shadow-[0_8px_80px_rgba(0,0,0,0.9)]' 
                         : 'border-white/5'
                     }`}
                     style={{
                       ...getCardStyle(i),
-                      transformStyle: 'preserve-3d',
+                      transformStyle: 'preserve-3d' as const,
                       background: '#0c0c0e',
                       willChange: 'transform, opacity',
                     }}
@@ -388,7 +385,7 @@ export default function Projects() {
                         )}
                       </div>
                     </div>
-                  </motion.div>
+                  </div>
                 );
               })}
             </div>
