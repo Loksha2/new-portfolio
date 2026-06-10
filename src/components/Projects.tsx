@@ -214,7 +214,7 @@ export default function Projects() {
 
   // Compute card 3D transforms — side cards peek from BEHIND the center card
   const getCardStyle = (index: number): React.CSSProperties => {
-    const offset = index - activeIndex; // -2, -1, 0, 1, 2
+    const offset = index - activeIndex;
     const absOffset = Math.abs(offset);
     const direction = offset < 0 ? -1 : 1;
 
@@ -223,10 +223,10 @@ export default function Projects() {
       return { opacity: 0, pointerEvents: 'none', position: 'absolute', transform: 'scale(0)' };
     }
 
-    // Center card: no transforms
+    // Center card: no transforms, front and center
     if (absOffset === 0) {
       return {
-        transform: 'translateX(0) rotateY(0deg) scale(1)',
+        transform: 'translateX(0px) rotateY(0deg) scale(1)',
         opacity: 1,
         zIndex: 10,
         position: 'absolute' as const,
@@ -235,22 +235,22 @@ export default function Projects() {
       };
     }
 
-    // Side cards: peek from behind with overlap
-    // Each card shifts only partially so it overlaps behind the center
-    const translateX = direction * (180 + (absOffset - 1) * 120); // tight overlap
-    const rotateY = direction * 45; // strong rotation to face inward
-    const scale = 0.75 - (absOffset - 1) * 0.08; // progressively smaller
+    // Side cards: extend BEYOND the center card edges so they're visible,
+    // rotated inward and scaled down to create depth
+    const translateX = direction * (320 + (absOffset - 1) * 160);
+    const rotateY = direction * -32;  // rotate away from center (negative = face outward)
+    const scale = 0.82 - (absOffset - 1) * 0.1;
     const zIndex = 10 - absOffset;
-    const brightness = 0.55 - (absOffset - 1) * 0.15;
-    const opacity = 1 - (absOffset - 1) * 0.3;
+    const brightness = 0.65 - (absOffset - 1) * 0.15;
+    const opacity = 1 - (absOffset - 1) * 0.25;
 
     return {
       transform: `translateX(${translateX}px) perspective(1200px) rotateY(${rotateY}deg) scale(${scale})`,
-      opacity: Math.max(0.1, opacity),
+      opacity: Math.max(0.15, opacity),
       zIndex,
       position: 'absolute' as const,
       transition: 'all 0.55s cubic-bezier(0.32, 0.72, 0, 1)',
-      filter: `brightness(${brightness})`,
+      filter: `brightness(${Math.max(0.25, brightness)})`,
     };
   };
 
@@ -306,7 +306,7 @@ export default function Projects() {
           <div className="relative">
             {/* Coverflow 3D Carousel */}
             <div 
-              className="relative w-full flex items-center justify-center overflow-hidden"
+              className="relative w-full flex items-center justify-center"
               style={{ height: '680px', perspective: '1400px' }}
               onTouchStart={handleTouchStart}
               onTouchEnd={handleTouchEnd}
